@@ -1,0 +1,116 @@
+:root {
+  color: #f4f7f2;
+  background: #123524;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, #1b5c32 0%, transparent 55%),
+    #123524;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2.5rem;
+}
+
+.app-shell.playing {
+  padding-bottom: 1rem;
+}
+
+.app-shell.playing .topbar {
+  margin-bottom: 0.6rem;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.brand {
+  color: #fff8e7;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+
+nav {
+  display: flex;
+  gap: 0.8rem;
+}
+
+nav a {
+  color: #e8f6ec;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+nav a.router-link-active {
+  color: #facc15;
+}
+
+.page {
+  min-width: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 14px;
+  border: 3px solid #14221b;
+  background: #fff8e7;
+  color: #14221b;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 4px 0 #14221b;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #facc15;
+}
+
+.btn:hover:not(:disabled),
+.btn:focus-visible:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 3px 0 #14221b;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+  box-shadow: 0 4px 0 #14221b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover,
+  .btn:focus-visible {
+    transform: none;
+  }
+}
