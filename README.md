@@ -29,3 +29,11 @@ Then open the local URL Vite prints (usually `http://localhost:5173`).
 ```sh
 npm run build
 ```
+
+## Deploy to Cloudflare
+
+Git-connected Workers (current Cloudflare default) runs `wrangler deploy` after your build.
+
+1. Build command: `npm run build` (output: `dist`).
+2. Config is in `wrangler.toml` (`[assets]` → `./dist`, SPA `not_found_handling`).
+3. Push to the connected branch; Cloudflare builds and deploys automatically.
