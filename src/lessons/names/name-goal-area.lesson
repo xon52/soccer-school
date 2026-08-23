@@ -1,0 +1,20 @@
+title The small box
+intro A part of the field will glow. Then pick its name.
+hide names
+hide ball
+
+step
+  caption Look at the field…
+
+step
+  caption This smaller box right in front of the goal is glowing.
+  draw goal-area left
+  duration 400
+
+question
+  prompt What is that called?
+  answer Goal area
+  wrong Penalty area
+  wrong Center circle
+  wrong Sideline
+  why The small box is the goal area. Goal kicks are taken from here.

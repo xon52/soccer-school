@@ -1,0 +1,21 @@
+title The long side line
+intro A part of the field will glow. Then pick its name.
+flip vertical
+hide names
+hide ball
+
+step
+  caption Look at the field…
+
+step
+  caption This long line along the side is glowing.
+  draw sideline bottom
+  duration 400
+
+question
+  prompt What is that called?
+  answer Sideline
+  wrong Goal line
+  wrong Halfway line
+  wrong Penalty area
+  why The long lines on the sides are the sidelines. If the ball goes over one, it is a throw-in.

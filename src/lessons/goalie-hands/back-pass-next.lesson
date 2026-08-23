@@ -1,0 +1,44 @@
+title A pass back to the goalie
+intro A teammate has the ball.
+
+setup
+  lineup 7v7
+  player B-CM at 33.6, 34
+  ball with B-CM
+
+step
+  caption A Blue teammate has the ball.
+  draw penalty-area left
+
+step
+  caption They kick it back to the goalie.
+  ball to 9.5, 34
+  arrow from B-CM to ball
+  draw penalty-area left
+  duration 1300
+
+question
+  prompt What should they do?
+  answer Use their feet
+  wrong Pick it up
+  wrong Throw-in
+  wrong Corner kick
+  why They have to play it with their feet.
+
+step
+  caption The goalie cannot pick this one up.
+  B-CM to 27.3, 34
+  B-G to 9.5, 34
+  ball with B-G
+  label B-G Kick
+  no-hands
+  draw penalty-area left
+
+step
+  caption They kick it away with their feet.
+  ball to 25.2, 27.2
+  arrow from B-G to ball
+  no-hands
+  draw penalty-area left
+  banner No pickup
+  duration 1200

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import PlayStage from '@/components/PlayStage.vue'
 import { getGroup, isGroupId } from '@/data/groups'
 import { useGroupSession } from '@/composables/useGroupSession'
+import { useSpeech } from '@/composables/useSpeech'
 
 const props = defineProps<{
   groupId: string
@@ -22,6 +23,7 @@ const {
   next,
   finished,
 } = useGroupSession()
+const { unlock } = useSpeech()
 
 const group = computed(() => getGroup(props.groupId))
 
@@ -38,6 +40,7 @@ function onAnswered(correct: boolean) {
 }
 
 async function onNext() {
+  unlock()
   next()
   if (finished.value) {
     await router.push({ name: 'results', params: { groupId: props.groupId } })

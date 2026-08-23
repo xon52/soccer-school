@@ -4,6 +4,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import { getGroup, isGroupId } from '@/data/groups'
 import { useGroupSession } from '@/composables/useGroupSession'
 import { useProgress } from '@/composables/useProgress'
+import { useSpeech } from '@/composables/useSpeech'
 import type { GroupId } from '@/types'
 
 const props = defineProps<{
@@ -13,6 +14,7 @@ const props = defineProps<{
 const router = useRouter()
 const { score, total, finished, start } = useGroupSession()
 const { clearScore } = useProgress()
+const { unlock } = useSpeech()
 const group = computed(() => getGroup(props.groupId))
 
 onMounted(async () => {
@@ -32,6 +34,7 @@ const message = computed(() => {
 async function tryAgain() {
   if (!isGroupId(props.groupId)) return
   const id: GroupId = props.groupId
+  unlock()
   clearScore(id)
   start(id)
   await router.push({ name: 'play', params: { groupId: id } })

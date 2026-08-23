@@ -1,0 +1,44 @@
+title A throw-in back to the goalie
+intro A teammate is on the sideline.
+
+setup
+  lineup 7v7
+  player B-RB at 23.1, 66.6
+  ball with B-RB
+
+step
+  caption A Blue teammate is about to throw the ball in.
+  label B-RB Throw
+  draw penalty-area left
+
+step
+  caption They throw it to the goalie.
+  ball to 9.5, 34
+  arrow from B-RB to ball
+  draw penalty-area left
+  duration 1300
+
+question
+  prompt Can they pick up a throw from a teammate?
+  answer No
+  wrong Yes
+  wrong Only outside the box
+  wrong Only after a goal
+  why No. A goalie cannot pick up a throw-in from a teammate.
+
+step
+  caption The goalie cannot pick this one up.
+  B-G to 9.5, 34
+  ball with B-G
+  label B-G Kick
+  no-hands
+  draw penalty-area left
+
+step
+  caption They kick it away with their feet.
+  ball to 25.2, 27.2
+  arrow from B-G to ball
+  no-hands
+  draw penalty-area left
+  banner No pickup
+  duration 1200

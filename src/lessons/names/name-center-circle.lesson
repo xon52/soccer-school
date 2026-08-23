@@ -1,0 +1,20 @@
+title The circle in the middle
+intro A part of the field will glow. Then pick its name.
+hide names
+hide ball
+
+step
+  caption Look at the field…
+
+step
+  caption This circle in the middle of the field is glowing.
+  draw center-circle
+  duration 400
+
+question
+  prompt What is that called?
+  answer Center circle
+  wrong Penalty area
+  wrong Goal area
+  wrong Halfway line
+  why Kick-offs happen at the center spot, and the other team stays outside this circle until the ball is kicked.

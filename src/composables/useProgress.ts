@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import type { GroupId, GroupScore } from '@/types'
+import { GROUP_IDS, type GroupId, type GroupScore } from '@/types'
 
 const STORAGE_KEY = 'soccer-school.progress'
 
@@ -12,7 +12,16 @@ function loadScores(): Partial<Record<GroupId, GroupScore>> {
     if (!raw) return {}
     const parsed: unknown = JSON.parse(raw)
     if (!parsed || typeof parsed !== 'object') return {}
-    return parsed as Partial<Record<GroupId, GroupScore>>
+    const record = parsed as Record<string, GroupScore>
+    if (record.goalie && !record['goalie-hands']) {
+      record['goalie-hands'] = record.goalie
+    }
+    delete record.goalie
+    const next: Partial<Record<GroupId, GroupScore>> = {}
+    for (const id of GROUP_IDS) {
+      if (record[id]) next[id] = record[id]
+    }
+    return next
   } catch {
     return {}
   }

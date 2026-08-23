@@ -1,0 +1,20 @@
+title The spot in the box
+intro A part of the field will glow. Then pick its name.
+hide names
+hide ball
+
+step
+  caption Look at the field…
+
+step
+  caption This little spot inside the big box is glowing.
+  draw penalty-spot left
+  duration 400
+
+question
+  prompt What is that called?
+  answer Penalty spot
+  wrong Center circle
+  wrong Goal area
+  wrong Halfway line
+  why If the defending team fouls in their own penalty area, the other team may get a penalty kick from this spot.

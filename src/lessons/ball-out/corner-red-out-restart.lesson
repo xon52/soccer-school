@@ -1,0 +1,34 @@
+title They kicked it over their own goal line
+intro Red has the ball near their goal.
+flip vertical
+
+setup
+  lineup 7v7
+  player R-RF at 88.2, 19.0
+  ball with R-RF
+
+step
+  caption Red has the ball near their own goal.
+
+step
+  caption Red kicks it away — but it goes over their own goal line.
+  ball to 110.3, 4.1
+  arrow from R-RF to ball
+  draw goal-line right
+  duration 1450
+
+question
+  prompt What restart is it?
+  answer Corner
+  wrong Throw-in
+  wrong Goal kick
+  wrong Kick-off
+  why If they last touch it over their own goal line, you get a corner kick.
+
+step
+  caption You get a corner kick from the corner of their end.
+  B-LF to 102.9, 1.4
+  ball with B-LF
+  label B-LF Corner
+  draw goal-line right
+  banner Corner kick

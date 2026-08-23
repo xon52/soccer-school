@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import PitchBackground from '@/components/PitchBackground.vue'
 import {
+  GOAL_AREA_H,
+  GOAL_AREA_W,
+  GOAL_AREA_Y,
+  HIGHLIGHT_BAR,
+  LENGTH_M,
+  PENALTY_H,
+  PENALTY_SPOT_GLOW_R,
+  PENALTY_SPOT_X,
+  PENALTY_W,
+  PENALTY_Y,
   PITCH_LENGTH,
   PITCH_WIDTH,
+  CENTER_R,
+  SVG_PER_M,
   VIEWBOX,
+  WIDTH_M,
   toSvg,
 } from '@/field'
-import type { Highlight, Player, Point, Team } from '@/types'
+import type { Arrow, Drawing, Highlight, Player, Point, Team } from '@/types'
 
 const props = withDefaults(
   defineProps<{
@@ -24,6 +38,8 @@ const props = withDefaults(
     kickTeam?: Team | null
     kickerId?: string | null
     moveDurationMs?: number
+    drawings?: Drawing[]
+    arrows?: Arrow[]
   }>(),
   {
     highlight: 'none',
@@ -39,6 +55,8 @@ const props = withDefaults(
     kickTeam: null,
     kickerId: null,
     moveDurationMs: 900,
+    drawings: () => [],
+    arrows: () => [],
   },
 )
 
@@ -57,23 +75,43 @@ function playerStyle(player: Player) {
   }
 }
 
-const kickArrow = computed(() => {
-  if (!props.kickFrom || !props.kickTo) return null
-  const from = toSvg(props.kickFrom)
-  const to = toSvg(props.kickTo)
-  const dx = to.x - from.x
-  const dy = to.y - from.y
+function arrowGeom(from: Point, to: Point) {
+  const start = toSvg(from)
+  const end = toSvg(to)
+  const dx = end.x - start.x
+  const dy = end.y - start.y
   const length = Math.hypot(dx, dy)
   if (length < 16) return null
   const ux = dx / length
   const uy = dy / length
   return {
-    x1: from.x,
-    y1: from.y,
-    x2: to.x - ux * 18,
-    y2: to.y - uy * 18,
+    x1: start.x,
+    y1: start.y,
+    x2: end.x - ux * 18,
+    y2: end.y - uy * 18,
+  }
+}
+
+const kickArrow = computed(() => {
+  if (!props.kickFrom || !props.kickTo) return null
+  const geom = arrowGeom(props.kickFrom, props.kickTo)
+  if (!geom) return null
+  return {
+    ...geom,
     team: props.kickTeam === 'red' ? 'red' : 'blue',
   }
+})
+
+const overlayArrows = computed(() => {
+  return props.arrows.flatMap((arrow, index) => {
+    const geom = arrowGeom(arrow.from, arrow.to)
+    if (!geom) return []
+    return [{
+      key: `arr-${index}`,
+      ...geom,
+      team: arrow.team ?? 'teach',
+    }]
+  })
 })
 
 const overlayIds = computed(() => {
@@ -88,13 +126,38 @@ const overlayIds = computed(() => {
 const fieldPlayers = computed(() => props.players.filter((player) => !overlayIds.value.has(player.id)))
 const overlayPlayers = computed(() => props.players.filter((player) => overlayIds.value.has(player.id)))
 
-const nearLeftGoal = computed(() => props.ball.x < 50)
-const nearTopSideline = computed(() => props.ball.y < 50)
-const penaltyX = computed(() => (nearLeftGoal.value ? 0 : PITCH_LENGTH - 165))
+const nearLeftGoal = computed(() => props.ball.x < LENGTH_M / 2)
+const nearTopSideline = computed(() => props.ball.y < WIDTH_M / 2)
+const penaltyX = computed(() => (nearLeftGoal.value ? 0 : PITCH_LENGTH - PENALTY_W))
 const goalLineX = computed(() => (nearLeftGoal.value ? 0 : PITCH_LENGTH))
 const sidelineY = computed(() => (nearTopSideline.value ? 0 : PITCH_WIDTH))
-const goalAreaX = computed(() => (nearLeftGoal.value ? 0 : PITCH_LENGTH - 55))
-const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 110))
+const goalAreaX = computed(() => (nearLeftGoal.value ? 0 : PITCH_LENGTH - GOAL_AREA_W))
+const penaltySpotX = computed(() => (nearLeftGoal.value ? PENALTY_SPOT_X : PITCH_LENGTH - PENALTY_SPOT_X))
+
+function drawingSvg(drawing: Drawing) {
+  if (drawing.kind === 'line') {
+    const from = toSvg({ x: drawing.x1, y: drawing.y1 })
+    const to = toSvg({ x: drawing.x2, y: drawing.y2 })
+    return { kind: 'line' as const, x1: from.x, y1: from.y, x2: to.x, y2: to.y }
+  }
+  if (drawing.kind === 'circle') {
+    const center = toSvg({ x: drawing.x, y: drawing.y })
+    return { kind: 'circle' as const, cx: center.x, cy: center.y, r: drawing.r * SVG_PER_M }
+  }
+  const origin = toSvg({ x: drawing.x, y: drawing.y })
+  return {
+    kind: drawing.kind,
+    x: origin.x,
+    y: origin.y,
+    w: drawing.w * SVG_PER_M,
+    h: drawing.h * SVG_PER_M,
+  }
+}
+
+const drawn = computed(() => props.drawings.map((drawing, index) => ({
+  key: `draw-${index}`,
+  ...drawingSvg(drawing),
+})))
 </script>
 
 <template>
@@ -139,102 +202,113 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
         >
           <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(220, 38, 38, 0.5)" />
         </marker>
+        <marker
+          id="kick-head-teach"
+          viewBox="0 0 10 10"
+          refX="8"
+          refY="5"
+          markerWidth="5"
+          markerHeight="5"
+          orient="auto"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#facc15" />
+        </marker>
       </defs>
 
-      <rect
-        x="-70"
-        y="-50"
-        width="1190"
-        height="780"
-        fill="#1b5c32"
-      />
-      <rect x="0" y="0" :width="PITCH_LENGTH" :height="PITCH_WIDTH" fill="url(#grass-stripes)" />
-
-      <g class="markings" fill="none" stroke="#f4f7f2" stroke-width="3">
-        <rect x="0" y="0" :width="PITCH_LENGTH" :height="PITCH_WIDTH" />
-        <line :x1="PITCH_LENGTH / 2" y1="0" :x2="PITCH_LENGTH / 2" :y2="PITCH_WIDTH" />
-        <circle :cx="PITCH_LENGTH / 2" :cy="PITCH_WIDTH / 2" r="91.5" />
-        <circle :cx="PITCH_LENGTH / 2" :cy="PITCH_WIDTH / 2" r="5" fill="#f4f7f2" stroke="none" />
-
-        <rect x="0" y="138.5" width="165" height="403" />
-        <rect :x="PITCH_LENGTH - 165" y="138.5" width="165" height="403" />
-        <rect x="0" y="248.4" width="55" height="183.2" />
-        <rect :x="PITCH_LENGTH - 55" y="248.4" width="55" height="183.2" />
-
-        <circle cx="110" :cy="PITCH_WIDTH / 2" r="5" fill="#f4f7f2" stroke="none" />
-        <circle :cx="PITCH_LENGTH - 110" :cy="PITCH_WIDTH / 2" r="5" fill="#f4f7f2" stroke="none" />
-
-        <path d="M 165 248.4 A 91.5 91.5 0 0 1 165 431.6" />
-        <path :d="`M ${PITCH_LENGTH - 165} 248.4 A 91.5 91.5 0 0 0 ${PITCH_LENGTH - 165} 431.6`" />
-
-        <path d="M 10 0 A 10 10 0 0 0 0 10" />
-        <path :d="`M 10 ${PITCH_WIDTH} A 10 10 0 0 1 0 ${PITCH_WIDTH - 10}`" />
-        <path :d="`M ${PITCH_LENGTH - 10} 0 A 10 10 0 0 1 ${PITCH_LENGTH} 10`" />
-        <path :d="`M ${PITCH_LENGTH - 10} ${PITCH_WIDTH} A 10 10 0 0 0 ${PITCH_LENGTH} ${PITCH_WIDTH - 10}`" />
-      </g>
-
-      <g class="goals" fill="none" stroke="#e8ece7" stroke-width="5">
-        <rect x="-22" y="304" width="22" height="72" />
-        <rect :x="PITCH_LENGTH" y="304" width="22" height="72" />
-      </g>
+      <PitchBackground v-once />
 
       <rect
         v-if="highlight === 'penaltyArea'"
         class="highlight-fill"
         :x="penaltyX"
-        y="138.5"
-        width="165"
-        height="403"
+        :y="PENALTY_Y"
+        :width="PENALTY_W"
+        :height="PENALTY_H"
       />
       <rect
         v-if="highlight === 'goalArea'"
         class="highlight-fill"
         :x="goalAreaX"
-        y="248.4"
-        width="55"
-        height="183.2"
+        :y="GOAL_AREA_Y"
+        :width="GOAL_AREA_W"
+        :height="GOAL_AREA_H"
       />
       <circle
         v-if="highlight === 'centerCircle'"
         class="highlight-fill"
         :cx="PITCH_LENGTH / 2"
         :cy="PITCH_WIDTH / 2"
-        r="91.5"
+        :r="CENTER_R"
       />
       <circle
         v-if="highlight === 'penaltySpot'"
         class="highlight-fill"
         :cx="penaltySpotX"
         :cy="PITCH_WIDTH / 2"
-        r="22"
+        :r="PENALTY_SPOT_GLOW_R"
       />
       <rect
         v-if="highlight === 'sideline'"
         class="highlight-bar"
         x="-6"
-        :y="sidelineY - 14"
+        :y="sidelineY - HIGHLIGHT_BAR / 2"
         :width="PITCH_LENGTH + 12"
-        height="28"
+        :height="HIGHLIGHT_BAR"
         rx="8"
       />
       <rect
         v-if="highlight === 'goalLine'"
         class="highlight-bar"
-        :x="goalLineX - 14"
+        :x="goalLineX - HIGHLIGHT_BAR / 2"
         y="-6"
-        width="28"
+        :width="HIGHLIGHT_BAR"
         :height="PITCH_WIDTH + 12"
         rx="8"
       />
       <rect
         v-if="highlight === 'halfwayLine'"
         class="highlight-bar"
-        :x="PITCH_LENGTH / 2 - 14"
+        :x="PITCH_LENGTH / 2 - HIGHLIGHT_BAR / 2"
         y="-6"
-        width="28"
+        :width="HIGHLIGHT_BAR"
         :height="PITCH_WIDTH + 12"
         rx="8"
       />
+
+      <template v-for="item in drawn" :key="item.key">
+        <line
+          v-if="item.kind === 'line'"
+          class="teach-line"
+          :x1="item.x1"
+          :y1="item.y1"
+          :x2="item.x2"
+          :y2="item.y2"
+        />
+        <rect
+          v-else-if="item.kind === 'rect'"
+          class="highlight-fill"
+          :x="item.x"
+          :y="item.y"
+          :width="item.w"
+          :height="item.h"
+        />
+        <rect
+          v-else-if="item.kind === 'bar'"
+          class="highlight-bar"
+          :x="item.x"
+          :y="item.y"
+          :width="item.w"
+          :height="item.h"
+          rx="8"
+        />
+        <circle
+          v-else-if="item.kind === 'circle'"
+          class="highlight-fill"
+          :cx="item.cx"
+          :cy="item.cy"
+          :r="item.r"
+        />
+      </template>
 
       <template v-if="showLabels">
         <text class="end-label" x="80" y="-18">Your goal</text>
@@ -252,6 +326,17 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
         :x2="kickArrow.x2"
         :y2="kickArrow.y2"
         :marker-end="kickArrow.team === 'red' ? 'url(#kick-head-red)' : 'url(#kick-head-blue)'"
+      />
+      <line
+        v-for="arrow in overlayArrows"
+        :key="arrow.key"
+        class="kick-arrow"
+        :class="arrow.team"
+        :x1="arrow.x1"
+        :y1="arrow.y1"
+        :x2="arrow.x2"
+        :y2="arrow.y2"
+        :marker-end="`url(#kick-head-${arrow.team})`"
       />
 
       <g
@@ -284,7 +369,12 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
           rx="6"
         />
         <circle v-else r="15" />
-        <text v-if="player.label" class="player-label" y="5">{{ player.label }}</text>
+        <text
+          v-if="player.label"
+          class="player-label"
+          :class="{ mark: player.label.length === 1 }"
+          dominant-baseline="central"
+        >{{ player.label }}</text>
         <g v-if="player.usingHands" class="gloves">
           <circle cx="-18" cy="-8" r="6" />
           <circle cx="18" cy="-8" r="6" />
@@ -335,7 +425,12 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
           rx="6"
         />
         <circle v-else r="15" />
-        <text v-if="player.label" class="player-label" y="5">{{ player.label }}</text>
+        <text
+          v-if="player.label"
+          class="player-label"
+          :class="{ mark: player.label.length === 1 }"
+          dominant-baseline="central"
+        >{{ player.label }}</text>
         <g v-if="player.usingHands" class="gloves">
           <circle cx="-18" cy="-8" r="6" />
           <circle cx="18" cy="-8" r="6" />
@@ -397,6 +492,15 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
   animation: pulse-glow 1.2s ease-in-out infinite alternate;
 }
 
+.teach-line {
+  fill: none;
+  stroke: #facc15;
+  stroke-width: 8;
+  stroke-linecap: round;
+  pointer-events: none;
+  animation: pulse-glow 1.2s ease-in-out infinite alternate;
+}
+
 @keyframes pulse-glow {
   from { opacity: 0.75; }
   to { opacity: 1; }
@@ -439,6 +543,10 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
   stroke: rgba(220, 38, 38, 0.5);
 }
 
+.kick-arrow.teach {
+  stroke: #facc15;
+}
+
 .ball {
   transform-box: view-box;
   transform-origin: 0 0;
@@ -466,6 +574,11 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
   font-weight: 800;
   text-anchor: middle;
   pointer-events: none;
+}
+
+.player-label.mark {
+  font-size: 22px;
+  font-weight: 900;
 }
 
 .gloves circle {
@@ -536,7 +649,8 @@ const penaltySpotX = computed(() => (nearLeftGoal.value ? 110 : PITCH_LENGTH - 1
   }
 
   .highlight-fill,
-  .highlight-bar {
+  .highlight-bar,
+  .teach-line {
     animation: none;
   }
 }

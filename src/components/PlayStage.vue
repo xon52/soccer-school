@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import QuizChoice from '@/components/QuizChoice.vue'
 import SoccerField from '@/components/SoccerField.vue'
 import { usePlayReplay } from '@/composables/usePlayReplay'
@@ -16,13 +16,13 @@ const emit = defineEmits<{
   answered: [correct: boolean]
 }>()
 
-type Phase = 'ready' | 'watching' | 'asking' | 'done'
+type Phase = 'asking' | 'done'
 
-const phase = ref<Phase>('ready')
+const phase = ref<Phase>('asking')
 const chosen = ref<number | null>(null)
 const showingOutcome = ref(false)
 
-const { muted, unlock, speak, toggleMute } = useSpeech()
+const { unlock, speak } = useSpeech()
 
 const frames = computed(() => {
   if (showingOutcome.value && props.play.outcome?.length) {
@@ -37,18 +37,20 @@ const {
   players,
   restartLabel,
   forbidHands,
-  isComplete,
-  isPlaying,
   kickFrom,
   kickTo,
   kickTeam,
   kickerId,
   moveDurationMs,
   reducedMotion,
+  drawings,
+  arrows,
   play: startPlay,
   replay,
   skipToEnd,
 } = usePlayReplay(frames)
+
+skipToEnd()
 
 watch(
   () => props.question,
@@ -56,26 +58,20 @@ watch(
     chosen.value = null
     showingOutcome.value = false
     phase.value = 'asking'
+    skipToEnd()
     speak(question.prompt)
   },
 )
 
-watch(isComplete, (done) => {
-  if (!done || phase.value !== 'watching') return
-  phase.value = chosen.value !== null ? 'done' : 'asking'
-  if (phase.value === 'asking') speak(props.question.prompt)
-})
-
 function watchPlay() {
   unlock()
   showingOutcome.value = false
-  phase.value = 'watching'
   replay()
 }
 
-function skipPlay() {
-  skipToEnd()
-}
+onMounted(() => {
+  speak(props.question.prompt)
+})
 
 async function choose(choiceIndex: number) {
   if (chosen.value !== null || phase.value !== 'asking') return
@@ -83,28 +79,25 @@ async function choose(choiceIndex: number) {
   const correct = choiceIndex === props.question.correctIndex
   emit('answered', correct)
   phase.value = 'done'
+  const answer = props.question.choices[props.question.correctIndex] ?? ''
+  const feedback = correct ? 'Yes! That’s the one.' : `Not quite. The right answer is ${answer}.`
+  await speak(`${feedback} ${props.question.why}`)
   if (props.isLastLayer && props.play.outcome?.length) {
     showingOutcome.value = true
     await nextTick()
     startPlay()
   }
-  const answer = props.question.choices[props.question.correctIndex] ?? ''
-  const feedback = correct ? 'Yes! That’s the one.' : `Not quite. The right answer is ${answer}.`
-  speak(`${feedback} ${props.question.why}`)
 }
 
 const answeredRight = computed(() => chosen.value === props.question.correctIndex)
 
 const prompt = computed(() => {
-  if (phase.value === 'ready') return props.play.label
-  if (phase.value === 'watching') return props.play.label
   if (phase.value === 'asking') return props.question.prompt
   return answeredRight.value ? 'Yes!' : 'Not quite.'
 })
 
 const fallbackText = computed(() => {
-  if (phase.value === 'ready' || phase.value === 'watching') return props.play.intro
-  if (phase.value === 'asking') return props.question.prompt
+  if (phase.value === 'asking') return props.play.intro || props.question.prompt
   const answer = props.question.choices[props.question.correctIndex] ?? ''
   const feedback = answeredRight.value ? 'That’s the one.' : `The right answer is ${answer}.`
   return `${feedback} ${props.question.why}`
@@ -133,25 +126,17 @@ const fallbackLabel = computed(() => {
       :kick-team="kickTeam"
       :kicker-id="kickerId"
       :move-duration-ms="moveDurationMs"
+      :drawings="drawings"
+      :arrows="arrows"
     />
 
     <section class="dock">
       <div class="prompt-row">
         <p class="prompt">{{ prompt }}</p>
-        <div class="speech">
-          <button
-            class="icon-btn"
-            type="button"
-            :aria-pressed="muted"
-            :aria-label="muted ? 'Unmute voice' : 'Mute voice'"
-            @click="toggleMute"
-          >
-            {{ muted ? 'Muted' : 'Voice' }}
-          </button>
-        </div>
+        <button class="replay-btn" type="button" @click="watchPlay">Replay</button>
       </div>
 
-      <div v-if="phase === 'asking' || phase === 'done'" class="choices">
+      <div class="choices">
         <QuizChoice
           v-for="(choice, index) in question.choices"
           :key="choice"
@@ -164,17 +149,7 @@ const fallbackLabel = computed(() => {
       </div>
 
       <div class="actions">
-        <template v-if="phase === 'ready'">
-          <button class="btn primary" type="button" @click="watchPlay">Watch the play</button>
-        </template>
-        <template v-else-if="phase === 'watching'">
-          <button class="btn" type="button" :disabled="isPlaying" @click="watchPlay">Restart</button>
-          <button class="btn" type="button" @click="skipPlay">Skip to end</button>
-        </template>
-        <template v-else>
-          <button class="btn ghost" type="button" @click="watchPlay">Watch again</button>
-          <slot />
-        </template>
+        <slot />
       </div>
 
       <details class="fallback">
@@ -222,24 +197,17 @@ const fallbackLabel = computed(() => {
   line-height: 1.25;
 }
 
-.speech {
+.replay-btn {
   flex-shrink: 0;
-}
-
-.icon-btn {
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  padding: 0.4rem 0.7rem;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
   border: 3px solid #14221b;
   background: #e8f6ec;
   color: #14221b;
   cursor: pointer;
-}
-
-.icon-btn[aria-pressed='true'] {
-  background: #fecaca;
 }
 
 .choices {
@@ -255,8 +223,8 @@ const fallbackLabel = computed(() => {
   gap: 0.7rem;
 }
 
-.ghost {
-  background: #e8f6ec;
+.actions:not(:has(*)) {
+  display: none;
 }
 
 .fallback {
