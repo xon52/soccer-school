@@ -23,7 +23,17 @@ question
   wrong Yes
   wrong Only outside the box
   wrong Only after a goal
-  why No. A goalie cannot pick up a kick from a teammate.
+  correct No pickup on a back pass.
+  why A goalie cannot pick up a kick from a teammate.
+
+question
+  prompt What should they do?
+  answer Use their feet
+  wrong Pick it up
+  wrong Throw-in
+  wrong Corner kick
+  correct Use their feet.
+  why They have to play it with their feet.
 
 step
   caption The goalie cannot pick this one up.
@@ -31,14 +41,14 @@ step
   B-G to 9.5, 34
   ball with B-G
   label B-G Kick
-  no-hands
+  no-hands B-G
   draw penalty-area left
 
 step
   caption They kick it away with their feet.
   ball to 25.2, 27.2
   arrow from B-G to ball
-  no-hands
+  no-hands B-G
   draw penalty-area left
   banner No pickup
   duration 1200

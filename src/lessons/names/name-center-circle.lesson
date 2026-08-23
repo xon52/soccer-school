@@ -4,10 +4,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This circle in the middle of the field is glowing.
+  caption This circle sits right in the middle of the field.
   draw center-circle
   duration 400
 
@@ -17,4 +17,5 @@ question
   wrong Penalty area
   wrong Goal area
   wrong Halfway line
+  correct Center circle.
   why Kick-offs happen at the center spot, and the other team stays outside this circle until the ball is kicked.

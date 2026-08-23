@@ -22,7 +22,17 @@ question
   wrong Red
   wrong Nobody
   wrong Play on
+  correct Blue's ball.
   why After a goal, the team that got scored on gets the ball.
+
+question
+  prompt What restart is it?
+  answer Kick-off
+  wrong Throw-in
+  wrong Goal kick
+  wrong Corner
+  correct Kick-off.
+  why Play starts again with a kick-off from the center circle.
 
 step
   caption You got scored on, so YOU kick off from the center.

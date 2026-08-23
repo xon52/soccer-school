@@ -4,10 +4,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This little spot inside the big box is glowing.
+  caption This little spot sits inside the big box.
   draw penalty-spot left
   duration 400
 
@@ -17,4 +17,5 @@ question
   wrong Center circle
   wrong Goal area
   wrong Halfway line
+  correct Penalty spot.
   why If the defending team fouls in their own penalty area, the other team may get a penalty kick from this spot.

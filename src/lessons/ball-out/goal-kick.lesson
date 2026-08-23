@@ -23,7 +23,17 @@ question
   wrong Red
   wrong Nobody
   wrong Play on
+  correct Blue's ball.
   why Red last touched it over your goal line, so you get the ball.
+
+question
+  prompt What restart is it?
+  answer Goal kick
+  wrong Throw-in
+  wrong Corner
+  wrong Kick-off
+  correct Goal kick.
+  why They last touched it over your goal line, so you restart with a goal kick.
 
 step
   caption You get a goal kick from the box by your goal.

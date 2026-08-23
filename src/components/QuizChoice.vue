@@ -4,6 +4,7 @@ defineProps<{
   revealed?: boolean
   selected?: boolean
   correct?: boolean
+  locked?: boolean
 }>()
 
 defineEmits<{
@@ -21,7 +22,7 @@ defineEmits<{
       yes: revealed && correct,
       no: revealed && selected && !correct,
     }"
-    :disabled="revealed"
+    :disabled="revealed || locked"
     @click="$emit('choose')"
   >
     {{ label }}

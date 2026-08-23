@@ -28,7 +28,6 @@ const props = withDefaults(
     highlight?: Highlight
     players?: Player[]
     restartLabel?: string
-    forbidHands?: boolean
     reducedMotion?: boolean
     showLabels?: boolean
     showBall?: boolean
@@ -45,7 +44,6 @@ const props = withDefaults(
     highlight: 'none',
     players: () => [],
     restartLabel: undefined,
-    forbidHands: false,
     reducedMotion: false,
     showLabels: true,
     showBall: true,
@@ -125,6 +123,18 @@ const overlayIds = computed(() => {
 
 const fieldPlayers = computed(() => props.players.filter((player) => !overlayIds.value.has(player.id)))
 const overlayPlayers = computed(() => props.players.filter((player) => overlayIds.value.has(player.id)))
+
+function markLabel(player: Player) {
+  return player.label && player.label.length === 1 ? player.label : undefined
+}
+
+function actionLabel(player: Player) {
+  return player.label && player.label.length > 1 ? player.label : undefined
+}
+
+function pillWidth(text: string) {
+  return Math.max(52, text.length * 9.5 + 22)
+}
 
 const nearLeftGoal = computed(() => props.ball.x < LENGTH_M / 2)
 const nearTopSideline = computed(() => props.ball.y < WIDTH_M / 2)
@@ -370,16 +380,29 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
         />
         <circle v-else r="15" />
         <text
-          v-if="player.label"
-          class="player-label"
-          :class="{ mark: player.label.length === 1 }"
+          v-if="markLabel(player)"
+          class="player-label mark"
           dominant-baseline="central"
         >{{ player.label }}</text>
+        <g
+          v-if="actionLabel(player)"
+          :key="`${player.id}-${player.label}`"
+          class="action-pop"
+        >
+          <rect
+            :x="-pillWidth(player.label ?? '') / 2"
+            y="-28"
+            :width="pillWidth(player.label ?? '')"
+            height="24"
+            rx="8"
+          />
+          <text y="-11">{{ player.label }}</text>
+        </g>
         <g v-if="player.usingHands" class="gloves">
           <circle cx="-18" cy="-8" r="6" />
           <circle cx="18" cy="-8" r="6" />
         </g>
-        <g v-if="forbidHands && player.role === 'goalkeeper'" class="no-hands">
+        <g v-if="player.forbidHands" class="no-hands">
           <circle r="22" />
           <line x1="-14" y1="-14" x2="14" y2="14" />
         </g>
@@ -426,16 +449,29 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
         />
         <circle v-else r="15" />
         <text
-          v-if="player.label"
-          class="player-label"
-          :class="{ mark: player.label.length === 1 }"
+          v-if="markLabel(player)"
+          class="player-label mark"
           dominant-baseline="central"
         >{{ player.label }}</text>
+        <g
+          v-if="actionLabel(player)"
+          :key="`${player.id}-${player.label}`"
+          class="action-pop"
+        >
+          <rect
+            :x="-pillWidth(player.label ?? '') / 2"
+            y="-28"
+            :width="pillWidth(player.label ?? '')"
+            height="24"
+            rx="8"
+          />
+          <text y="-11">{{ player.label }}</text>
+        </g>
         <g v-if="player.usingHands" class="gloves">
           <circle cx="-18" cy="-8" r="6" />
           <circle cx="18" cy="-8" r="6" />
         </g>
-        <g v-if="forbidHands && player.role === 'goalkeeper'" class="no-hands">
+        <g v-if="player.forbidHands" class="no-hands">
           <circle r="22" />
           <line x1="-14" y1="-14" x2="14" y2="14" />
         </g>
@@ -579,6 +615,30 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
 .player-label.mark {
   font-size: 22px;
   font-weight: 900;
+}
+
+.action-pop {
+  pointer-events: none;
+  animation: action-float 2.5s ease-out forwards;
+}
+
+.action-pop rect {
+  fill: rgba(15, 23, 42, 0.92);
+  stroke: #facc15;
+  stroke-width: 2;
+}
+
+.action-pop text {
+  fill: #fff8e7;
+  font-size: 16px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+@keyframes action-float {
+  0% { opacity: 1; transform: translateY(0); }
+  70% { opacity: 1; transform: translateY(-26px); }
+  100% { opacity: 0; transform: translateY(-36px); }
 }
 
 .gloves circle {

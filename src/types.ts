@@ -24,6 +24,7 @@ export interface Player {
   role?: 'goalkeeper' | 'outfield'
   hasBall?: boolean
   usingHands?: boolean
+  forbidHands?: boolean
   label?: string
 }
 
@@ -45,7 +46,6 @@ export interface Keyframe {
   highlight?: Highlight
   players?: Player[]
   restartLabel?: string
-  forbidHands?: boolean
   /** Time to animate the ball onto this frame. */
   durationMs?: number
   /** Draw a kick arrow from the previous ball position to this one. */
@@ -67,6 +67,7 @@ export interface Question {
   prompt: string
   choices: [string, string, string, string]
   correctIndex: number
+  correct: string
   why: string
 }
 

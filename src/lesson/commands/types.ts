@@ -25,7 +25,7 @@ export interface StepBuilder {
   banner?: string
   durationMs?: number
   hands?: string
-  noHands: boolean
+  noHands?: string
 }
 
 export interface LessonBuilder {
@@ -41,8 +41,7 @@ export interface LessonBuilder {
   setupPlayers: Map<string, Point>
   ball?: { at?: Point; with?: string }
   steps: StepBuilder[]
-  question?: Question
-  questionAt?: number
+  questions: { question: Question; at: number }[]
 }
 
 export function emptyStep(): StepBuilder {
@@ -52,7 +51,6 @@ export function emptyStep(): StepBuilder {
     arrows: [],
     drawings: [],
     labels: new Map(),
-    noHands: false,
   }
 }
 
@@ -64,6 +62,7 @@ export function emptyBuilder(): LessonBuilder {
     setupSeen: false,
     setupPlayers: new Map(),
     steps: [],
+    questions: [],
   }
 }
 

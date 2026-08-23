@@ -4,10 +4,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This big box in front of the goal is glowing.
+  caption This big box sits in front of the goal.
   draw penalty-area left
   duration 400
 
@@ -17,4 +17,5 @@ question
   wrong Goal area
   wrong Center circle
   wrong Halfway line
+  correct Penalty area.
   why The big box is the penalty area. This is where the goalie may use their hands.

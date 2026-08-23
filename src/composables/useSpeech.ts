@@ -1,4 +1,4 @@
-import { onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const MUTE_KEY = 'soccer-school.mute'
 
@@ -18,7 +18,7 @@ function synth() {
 
 function safetyMs(text: string) {
   const words = text.trim().split(/\s+/).filter(Boolean).length
-  return Math.min(12_000, Math.max(2_000, words * 400))
+  return Math.min(20_000, Math.max(8_000, words * 800 + 2_000))
 }
 
 export function useSpeech() {
@@ -47,19 +47,47 @@ export function useSpeech() {
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.rate = 0.95
     return new Promise((resolve) => {
-      const finish = () => resolve()
-      const timer = window.setTimeout(finish, safetyMs(text))
-      const done = () => {
+      let settled = false
+      let heard = false
+      let timer = 0
+      let poll = 0
+      let resume = 0
+
+      const finish = () => {
+        if (settled) return
+        settled = true
         window.clearTimeout(timer)
-        finish()
-      }
-      utterance.onend = done
-      utterance.onerror = done
-      speech.speak(utterance)
-      if (gen !== speakGen) {
-        window.clearTimeout(timer)
+        window.clearInterval(poll)
+        window.clearInterval(resume)
         resolve()
       }
+
+      timer = window.setTimeout(finish, safetyMs(text))
+      poll = window.setInterval(() => {
+        if (gen !== speakGen) {
+          finish()
+          return
+        }
+        if (speech.speaking || speech.pending) heard = true
+        else if (heard) finish()
+      }, 80)
+      resume = window.setInterval(() => {
+        if (gen !== speakGen) return
+        if (speech.paused) speech.resume()
+      }, 250)
+
+      utterance.onend = () => {
+        if (gen === speakGen) finish()
+      }
+      utterance.onerror = () => finish()
+
+      window.setTimeout(() => {
+        if (gen !== speakGen) {
+          finish()
+          return
+        }
+        speech.speak(utterance)
+      }, 50)
     })
   }
 
@@ -68,8 +96,6 @@ export function useSpeech() {
     localStorage.setItem(MUTE_KEY, muted.value ? '1' : '0')
     if (muted.value) cancel()
   }
-
-  onUnmounted(cancel)
 
   return {
     muted,

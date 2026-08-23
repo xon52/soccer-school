@@ -109,8 +109,8 @@ export const stepHandlers: Record<string, CommandHandler> = {
   hands(line, args, _rest, builder) {
     currentStep(builder, line).hands = parseTag(args[0] ?? '', line.no).tag
   },
-  'no-hands'(line, _args, _rest, builder) {
-    currentStep(builder, line).noHands = true
+  'no-hands'(line, args, _rest, builder) {
+    currentStep(builder, line).noHands = parseTag(args[0] ?? '', line.no).tag
   },
 }
 

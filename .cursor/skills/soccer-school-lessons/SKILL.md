@@ -8,7 +8,7 @@ description: >-
 
 # Soccer School lessons
 
-Lessons are **one file, one question**. Do not add plays in TypeScript. Copy a similar file in `src/lessons/<group>/` and edit it.
+Lessons are **one file, one play**. A play can ask **one or more questions** on the same moment. Do not add plays in TypeScript. Copy a similar file in `src/lessons/<group>/` and edit it.
 
 Glob load: `src/lessons/**/*.lesson` via `src/lesson/load.ts`. A parse error crashes app load.
 
@@ -49,7 +49,17 @@ question
   wrong Blue
   wrong Nobody
   wrong Play on
-  why Blue touched it last over the sideline, so Red gets the ball.
+  correct Red's ball.
+  why Blue last touched it over the sideline, so Red throws it in.
+
+question
+  prompt What restart is it?
+  answer Throw-in
+  wrong Goal kick
+  wrong Corner
+  wrong Kick-off
+  correct Throw-in.
+  why Over the sideline, the other team throws it back in.
 
 step
   caption Red throws it back onto the field.
@@ -58,7 +68,7 @@ step
 
 `#` starts a comment. Indentation is optional. `#` to end of line.
 
-**Order:** header → optional `setup` → one or more `step` → exactly one `question` → optional more `step`s (shown after the answer). At least one `step` must come **before** the question.
+**Order:** header → optional `setup` → one or more `step` → one or more `question` → optional more `step`s (shown after the last answer). At least one `step` must come **before** the first question.
 
 ## Header
 
@@ -103,6 +113,8 @@ ball at 33.6, 21.8
 
 Unmentioned players stay put. Drawings and arrows are **per-step** (repeat them if they should stay). Positions, labels, and `hands` persist.
 
+The first step's caption is the lead-in. If several lessons in a group share a **byte-identical** lead-in caption, only the first one in a session speaks it — that is how a group gives a one-time instruction (`Look at the field. One part will glow yellow.`) without repeating it every play. Do not restate that instruction in the later steps.
+
 | Command | Notes |
 |---|---|
 | `caption <text>` | Spoken while the step animates; keep it kid-simple |
@@ -110,11 +122,11 @@ Unmentioned players stay put. Drawings and arrows are **per-step** (repeat them 
 | `ball to x, y` / `ball with TAG` | Independent ball vs possession |
 | `arrow from <TAG\|ball\|x, y> to <TAG\|ball\|x, y>` | Teaching/kick arrow |
 | `draw …` | Yellow overlay (below) |
-| `label TAG text` | Text on the token |
+| `label TAG text` | One character stays on the token; longer text floats above the player and fades |
 | `banner text` | Center overlay ("Throw-in") |
 | `duration ms` | Move animation only |
 | `hands TAG` | Goalie gloves |
-| `no-hands` | Slash on the keeper this step |
+| `no-hands TAG` | Slash on **that** player this step |
 
 ## Draw
 
@@ -134,11 +146,21 @@ Generic: `draw line x1, y1 to x2, y2` · `draw rect x, y, w, h` · `draw circle 
 
 ## Question
 
-Exactly: `prompt`, one `answer`, three `wrong`, `why`. Choices are shuffled at runtime. Two quiz beats for one play = **two files** that share the same setup/steps (see `ball-out/throw-in-blue-out.lesson` vs `ball-out/throw-in-blue-out-restart.lesson`).
+Exactly: `prompt`, one `answer`, three `wrong`, `correct`, `why`. Choices are shuffled at runtime.
+
+**`correct` — shown on screen on a hit.** The voice only says a short random opener ("That's right." / "You got it." / "Nice one."), so this line is read, not heard, and the answer is never restated out loud. Rules:
+
+- Short and sharp. One clause, no teaching, no "because".
+- Do not write an opener into it; the voice already said one.
+- Do not echo a yes/no choice ("Yes" / "No"). State the fact: `correct She can use her hands there.`
+
+**`why` — spoken on a miss only.** This is where the teaching goes: one sentence saying what actually happens and why.
+
+**Two beats on one moment = two `question` blocks in the same file**, back to back with no `step` between them (see `ball-out/throw-in-blue-out.lesson`: who gets the ball, then what restart). The clip does not replay between them; the second prompt is just asked over the same frozen frame. Only split into separate files when the second beat needs its own animation.
 
 ## Audience
 
-Kids ~8–10. You are blue. Captions and `why` should be short and concrete.
+Kids ~8–10. You are blue. Captions, `correct`, and `why` should be short and concrete.
 
 ## After writing
 
