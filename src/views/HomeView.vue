@@ -2,9 +2,11 @@
 import { RouterLink } from 'vue-router'
 import { groups } from '@/data/groups'
 import { useProgress } from '@/composables/useProgress'
+import { useSpeech } from '@/composables/useSpeech'
 import type { GroupId } from '@/types'
 
 const { scoreFor } = useProgress()
+const { unlock } = useSpeech()
 
 function scoreLabel(groupId: GroupId) {
   const score = scoreFor(groupId)
@@ -15,11 +17,7 @@ function scoreLabel(groupId: GroupId) {
 
 <template>
   <section class="hub">
-    <p class="eyebrow">For soccer kids</p>
-    <h1>Soccer School</h1>
-    <p class="lead">
-      You are the <strong>blue</strong> team. Watch the play, then tap what happens next.
-    </p>
+    <h1 class="lead">An interactive quiz to learn the rules of soccer.</h1>
 
     <div class="cards">
       <template v-for="group in groups" :key="group.id">
@@ -32,6 +30,7 @@ function scoreLabel(groupId: GroupId) {
           v-else
           class="hub-card"
           :to="{ name: 'play', params: { groupId: group.id } }"
+          @click="unlock"
         >
           <strong>{{ group.title }}</strong>
           <span>{{ group.blurb }}</span>
@@ -48,23 +47,10 @@ function scoreLabel(groupId: GroupId) {
   gap: 0.85rem;
 }
 
-.eyebrow {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-  color: #facc15;
-}
-
-h1 {
-  margin: 0;
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
-  line-height: 1.05;
-}
-
 .lead {
   margin: 0 0 0.4rem;
   font-size: 1.2rem;
+  font-weight: 700;
   max-width: 36rem;
 }
 

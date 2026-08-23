@@ -1,13 +1,13 @@
 # Soccer School
 
-A visual soccer-rules lesson and quiz for kids about 8–10. You are the **blue** team. Press **Watch the play**, then pick what happens next.
+A visual soccer-rules lesson and quiz for kids about 8–10. You are the **blue** team. Watch the play, then pick what happens next.
 
 ## What it teaches
 
 1. Ball over the **sideline** → throw-in for the other team
 2. Ball over the **goal line** (not a goal) → goal kick or corner, depending on who last touched it
 3. After a **goal** → kick-off from the center by the team that got scored on
-4. **Goalkeeper hands** → only in their own penalty area, and not from a teammate’s kick. After a catch, they can throw or kick it out.
+4. **Goalkeeper hands** → only in their own penalty area, and not from a teammate’s kick or throw-in. After a catch, they can throw or kick it out.
 5. **Pitch names** → sideline, goal line, penalty area, goal area, halfway line, center circle, penalty spot
 
 ## Quizzes

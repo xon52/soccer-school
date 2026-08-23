@@ -8,7 +8,8 @@ export type Highlight =
   | 'centerCircle'
   | 'halfwayLine'
   | 'penaltySpot'
-export type GroupId = 'names' | 'ball-out' | 'goalie' | 'fouls'
+export const GROUP_IDS = ['names', 'ball-out', 'goalie-hands', 'fouls'] as const
+export type GroupId = (typeof GROUP_IDS)[number]
 
 export interface Point {
   x: number
@@ -26,6 +27,18 @@ export interface Player {
   label?: string
 }
 
+export type Drawing =
+  | { kind: 'line'; x1: number; y1: number; x2: number; y2: number }
+  | { kind: 'rect'; x: number; y: number; w: number; h: number }
+  | { kind: 'bar'; x: number; y: number; w: number; h: number }
+  | { kind: 'circle'; x: number; y: number; r: number }
+
+export interface Arrow {
+  from: Point
+  to: Point
+  team?: Team
+}
+
 export interface Keyframe {
   ball: Point
   caption: string
@@ -37,6 +50,8 @@ export interface Keyframe {
   durationMs?: number
   /** Draw a kick arrow from the previous ball position to this one. */
   kick?: boolean
+  drawings?: Drawing[]
+  arrows?: Arrow[]
 }
 
 export interface Play {

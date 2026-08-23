@@ -1,0 +1,20 @@
+title The line by the goal
+intro A part of the field will glow. Then pick its name.
+hide names
+hide ball
+
+step
+  caption Look at the field…
+
+step
+  caption This line at the end of the field, by the goal, is glowing.
+  draw goal-line left
+  duration 400
+
+question
+  prompt What is that called?
+  answer Goal line
+  wrong Sideline
+  wrong Halfway line
+  wrong Center circle
+  why The lines at each end are the goal lines. A goal only counts if the ball goes over this line into the net.

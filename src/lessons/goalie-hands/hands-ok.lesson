@@ -1,0 +1,44 @@
+title Hands inside the box
+intro Red has the ball inside the box.
+
+setup
+  lineup 7v7
+  player R-LF at 32, 32.6
+  ball with R-LF
+
+step
+  caption Red has the ball inside the penalty area.
+  draw penalty-area left
+
+step
+  caption Red shoots — and the goalie catches it with their hands!
+  B-G to 9.5, 34
+  ball with B-G
+  hands B-G
+  label B-G Catch
+  arrow from R-LF to ball
+  draw penalty-area left
+  banner Catch
+  duration 1300
+
+question
+  prompt Can the goalie use their hands here?
+  answer Yes
+  wrong No
+  wrong Only outside the box
+  wrong Only after a goal
+  why Yes. The goalie is inside their own penalty area, so they may catch the ball.
+
+step
+  caption The goalie has the ball in their hands.
+  label B-G Throw
+  draw penalty-area left
+
+step
+  caption They throw it out to a teammate. Play goes on!
+  B-LB to 29.4, 23.1
+  ball with B-LB
+  arrow from B-G to ball
+  draw penalty-area left
+  banner Throw out
+  duration 1200

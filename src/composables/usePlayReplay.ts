@@ -1,10 +1,12 @@
 import { computed, onUnmounted, ref, toValue, watch } from 'vue'
 import type { MaybeRefOrGetter } from 'vue'
-import type { Highlight, Keyframe, Player, Point, Team } from '@/types'
+import { CENTER_M } from '@/field'
+import { useSpeech } from '@/composables/useSpeech'
+import type { Arrow, Drawing, Highlight, Keyframe, Player, Point, Team } from '@/types'
 
 const KICK_MS = 1450
 const MOVE_MS = 800
-const END_HOLD_MS = 400
+const STEP_PAUSE_MS = 500
 
 function prefersReducedMotion() {
   if (typeof window === 'undefined' || !window.matchMedia) return false
@@ -23,6 +25,7 @@ function holderOf(frame: Keyframe | undefined) {
 }
 
 export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
+  const { speak, cancel } = useSpeech()
   const index = ref(0)
   const isPlaying = ref(false)
   const isComplete = ref(false)
@@ -32,6 +35,7 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
   const instantMove = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
   let raf = 0
+  let runId = 0
 
   const list = computed(() => toValue(frames))
 
@@ -39,7 +43,7 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     return list.value[index.value] ?? list.value[0]
   })
 
-  const ball = computed((): Point => current.value?.ball ?? { x: 50, y: 50 })
+  const ball = computed((): Point => current.value?.ball ?? CENTER_M)
 
   const highlight = computed((): Highlight => current.value?.highlight ?? 'none')
 
@@ -48,6 +52,10 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
   const restartLabel = computed(() => current.value?.restartLabel)
 
   const forbidHands = computed(() => current.value?.forbidHands === true)
+
+  const drawings = computed((): Drawing[] => current.value?.drawings ?? [])
+
+  const arrows = computed((): Arrow[] => current.value?.arrows ?? [])
 
   const moveDurationMs = computed(() => {
     if (instantMove.value || prefersReducedMotion()) return 20
@@ -100,25 +108,50 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     })
   }
 
-  function advance() {
-    if (index.value >= lastIndex()) {
-      finish()
-      return
-    }
+  function wait(ms: number, id: number) {
+    return new Promise<void>((resolve) => {
+      if (id !== runId) {
+        resolve()
+        return
+      }
+      timer = setTimeout(() => {
+        timer = undefined
+        resolve()
+      }, ms)
+    })
+  }
+
+  function prepareKick() {
     const from = list.value[index.value]
     const holder = holderOf(from)
-    const nextIndex = index.value + 1
-    const next = list.value[nextIndex]
     previousBall.value = holder ? { x: holder.x, y: holder.y } : (from?.ball ?? null)
     kickTeam.value = holder?.team ?? null
     kickerId.value = holder?.id ?? null
-    instantMove.value = false
-    index.value = nextIndex
-    const wait = frameDuration(next) + (nextIndex >= lastIndex() ? END_HOLD_MS : 120)
-    timer = setTimeout(() => {
-      if (index.value >= lastIndex()) finish()
-      else advance()
-    }, wait)
+  }
+
+  async function hold(frame: Keyframe | undefined, moveMs: number, id: number) {
+    const pause = prefersReducedMotion() ? 50 : STEP_PAUSE_MS
+    await Promise.all([wait(moveMs, id), speak(frame?.caption ?? '')])
+    if (id !== runId) return
+    await wait(pause, id)
+  }
+
+  async function runLoop(id: number) {
+    let first = true
+    while (id === runId) {
+      const frame = list.value[index.value]
+      const moveMs = first ? 0 : frameDuration(frame)
+      first = false
+      instantMove.value = false
+      await hold(frame, moveMs, id)
+      if (id !== runId) return
+      if (index.value >= lastIndex()) {
+        finish()
+        return
+      }
+      prepareKick()
+      index.value += 1
+    }
   }
 
   function play() {
@@ -132,20 +165,23 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
       return
     }
     isPlaying.value = true
-    if (list.value.length <= 1) {
-      finish()
-      return
-    }
-    afterPaint(advance)
+    const id = ++runId
+    afterPaint(() => {
+      void runLoop(id)
+    })
   }
 
   function pause() {
+    runId += 1
     clearTimer()
+    cancel()
     isPlaying.value = false
   }
 
   function skipToEnd() {
+    runId += 1
     clearTimer()
+    cancel()
     const first = list.value[0]
     const last = list.value[lastIndex()]
     const holder = holderOf(first)
@@ -159,7 +195,10 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
   }
 
   function replay() {
+    runId += 1
+    const id = runId
     clearTimer()
+    cancel()
     instantMove.value = true
     index.value = 0
     previousBall.value = null
@@ -169,16 +208,14 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     isPlaying.value = true
     afterPaint(() => {
       instantMove.value = false
-      if (list.value.length <= 1) {
-        finish()
-        return
-      }
-      advance()
+      void runLoop(id)
     })
   }
 
   function reset() {
+    runId += 1
     clearTimer()
+    cancel()
     index.value = 0
     previousBall.value = null
     kickTeam.value = null
@@ -196,7 +233,11 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     { deep: false },
   )
 
-  onUnmounted(clearTimer)
+  onUnmounted(() => {
+    runId += 1
+    clearTimer()
+    cancel()
+  })
 
   return {
     index,
@@ -209,6 +250,8 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     players,
     restartLabel,
     forbidHands,
+    drawings,
+    arrows,
     kickFrom,
     kickTo,
     kickTeam,

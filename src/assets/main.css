@@ -48,26 +48,36 @@ body {
   margin-bottom: 1.4rem;
 }
 
+.mute-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border: 3px solid #fff8e7;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff8e7;
+  cursor: pointer;
+}
+
+.mute-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.mute-btn[aria-pressed='true'] {
+  background: #fecaca;
+  border-color: #fecaca;
+  color: #14221b;
+}
+
 .brand {
   color: #fff8e7;
   text-decoration: none;
   font-weight: 900;
   font-size: 1.2rem;
-}
-
-nav {
-  display: flex;
-  gap: 0.8rem;
-}
-
-nav a {
-  color: #e8f6ec;
-  text-decoration: none;
-  font-weight: 800;
-}
-
-nav a.router-link-active {
-  color: #facc15;
 }
 
 .page {

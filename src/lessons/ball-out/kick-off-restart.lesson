@@ -1,0 +1,34 @@
+title After a goal
+intro Red has the ball in front of your goal.
+
+setup
+  lineup 7v7
+  player R-LF at 31, 34
+  ball with R-LF
+
+step
+  caption Red has the ball and shoots…
+
+step
+  caption It’s in! Red scored a goal.
+  ball to -3.2, 34
+  arrow from R-LF to ball
+  draw goal-line left
+  duration 1450
+
+question
+  prompt What restart is it?
+  answer Kick-off
+  wrong Throw-in
+  wrong Goal kick
+  wrong Corner
+  why Play starts again with a kick-off from the center circle.
+
+step
+  caption You got scored on, so YOU kick off from the center.
+  B-RF to 52.5, 34
+  R-LF to 60.9, 34
+  ball with B-RF
+  label B-RF Kick-off
+  draw center-circle
+  banner Kick-off
