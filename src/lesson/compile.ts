@@ -68,7 +68,6 @@ function snapshot(step: StepBuilder, players: Player[], ball: Point): Keyframe {
     caption: step.caption,
     players: clonePlayers(players),
     restartLabel: step.banner,
-    forbidHands: step.noHands || undefined,
     durationMs: step.durationMs,
     drawings: step.drawings.length ? [...step.drawings] : undefined,
     arrows: arrows.length ? arrows : undefined,
@@ -85,8 +84,12 @@ function applyStep(players: Player[], ball: Point, step: StepBuilder) {
   for (const [tag, text] of step.labels) {
     findPlayer(next, tag).label = text
   }
+  for (const player of next) player.forbidHands = false
   if (step.hands) {
     for (const player of next) player.usingHands = player.id === step.hands
+  }
+  if (step.noHands) {
+    findPlayer(next, step.noHands).forbidHands = true
   }
   const placed = applyBall(next, ball, step.ball)
   next = placed.players
@@ -120,7 +123,7 @@ export function compileLesson(builder: LessonBuilder): Scenario {
 
   const frames: Keyframe[] = []
   const outcome: Keyframe[] = []
-  const questionAt = builder.questionAt ?? builder.steps.length
+  const questionAt = builder.questions[0]?.at ?? builder.steps.length
 
   builder.steps.forEach((step, index) => {
     const applied = applyStep(players, ball, step)
@@ -142,6 +145,6 @@ export function compileLesson(builder: LessonBuilder): Scenario {
       hideNames: builder.hideNames || undefined,
       hideBall: builder.hideBall || undefined,
     },
-    questions: [builder.question!],
+    questions: builder.questions.map((item) => item.question),
   }
 }

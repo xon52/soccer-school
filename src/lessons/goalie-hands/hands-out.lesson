@@ -21,20 +21,30 @@ question
   wrong Yes
   wrong Only outside the box
   wrong Only after a goal
-  why No. Outside the penalty area, the goalie cannot use their hands.
+  correct Feet only outside the box.
+  why Outside the penalty area, the goalie cannot use their hands.
+
+question
+  prompt What should they do?
+  answer Use their feet
+  wrong Pick it up
+  wrong Corner kick
+  wrong Goal kick
+  correct Use their feet.
+  why Outside the box they must use their feet, like anyone else.
 
 step
   caption The goalie has to use their feet.
   ball with B-G
   label B-G Kick
-  no-hands
+  no-hands B-G
   draw penalty-area left
 
 step
   caption They kick it away — no hands.
   ball to 44.1, 27.2
   arrow from B-G to ball
-  no-hands
+  no-hands B-G
   draw penalty-area left
   banner No hands
   duration 1200

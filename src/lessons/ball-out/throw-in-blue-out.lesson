@@ -23,7 +23,17 @@ question
   wrong Blue
   wrong Nobody
   wrong Play on
-  why Blue touched it last over the sideline, so Red gets the ball.
+  correct Red's ball.
+  why Blue last touched it over the sideline, so Red throws it in.
+
+question
+  prompt What restart is it?
+  answer Throw-in
+  wrong Goal kick
+  wrong Corner
+  wrong Kick-off
+  correct Throw-in.
+  why Over the sideline, the other team throws it back in.
 
 step
   caption Red is ready to throw it back in.

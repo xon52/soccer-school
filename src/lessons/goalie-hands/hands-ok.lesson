@@ -1,5 +1,5 @@
 title Hands inside the box
-intro Red has the ball inside the box.
+intro Red is attacking your goal.
 
 setup
   lineup 7v7
@@ -7,7 +7,7 @@ setup
   ball with R-LF
 
 step
-  caption Red has the ball inside the penalty area.
+  caption Red has the ball near your goal.
   draw penalty-area left
 
 step
@@ -27,7 +27,17 @@ question
   wrong No
   wrong Only outside the box
   wrong Only after a goal
-  why Yes. The goalie is inside their own penalty area, so they may catch the ball.
+  correct Hands are fine in the box.
+  why The goalie is inside their own penalty area, so they may catch the ball.
+
+question
+  prompt After the catch, what can they do?
+  answer Throw or kick it out
+  wrong Run holding the ball
+  wrong Give it to Red
+  wrong Take a corner
+  correct Throw it or kick it out.
+  why After a catch, the goalie can throw it or drop it and kick it. They cannot run the whole field holding it.
 
 step
   caption The goalie has the ball in their hands.

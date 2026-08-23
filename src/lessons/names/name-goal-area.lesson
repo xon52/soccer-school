@@ -4,10 +4,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This smaller box right in front of the goal is glowing.
+  caption This smaller box sits right in front of the goal.
   draw goal-area left
   duration 400
 
@@ -17,4 +17,5 @@ question
   wrong Penalty area
   wrong Center circle
   wrong Sideline
+  correct Goal area.
   why The small box is the goal area. Goal kicks are taken from here.

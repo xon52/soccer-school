@@ -90,8 +90,8 @@ export function parseLesson(source: string): LessonBuilder {
 
   if (!builder.title) throw new LessonParseError('missing title', 1)
   if (!builder.intro) throw new LessonParseError('missing intro', 1)
-  if (!builder.question) throw new LessonParseError('missing question', 1)
-  if ((builder.questionAt ?? 0) < 1) {
+  if (builder.questions.length === 0) throw new LessonParseError('missing question', 1)
+  if ((builder.questions[0]?.at ?? 0) < 1) {
     throw new LessonParseError('question needs at least one step before it', 1)
   }
 

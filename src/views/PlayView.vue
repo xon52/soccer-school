@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PlayStage from '@/components/PlayStage.vue'
 import { getGroup, isGroupId } from '@/data/groups'
@@ -23,9 +23,11 @@ const {
   next,
   finished,
 } = useGroupSession()
-const { unlock } = useSpeech()
+const { unlock, cancel } = useSpeech()
 
 const group = computed(() => getGroup(props.groupId))
+
+const lastCorrect = ref(false)
 
 onMounted(async () => {
   if (!isGroupId(props.groupId) || group.value?.comingSoon) {
@@ -36,10 +38,13 @@ onMounted(async () => {
 })
 
 function onAnswered(correct: boolean) {
+  lastCorrect.value = correct
   recordAnswer(correct)
 }
 
 async function onNext() {
+  cancel()
+  lastCorrect.value = false
   unlock()
   next()
   if (finished.value) {
@@ -58,8 +63,9 @@ async function onNext() {
       :question="current.question"
       :is-last-layer="isLastLayer"
       @answered="onAnswered"
+      @continue="onNext"
     >
-      <button v-if="revealed" class="btn primary" type="button" @click="onNext">
+      <button v-if="revealed && !lastCorrect" class="btn primary" type="button" @click="onNext">
         {{ isLast ? 'See your score' : 'Next' }}
       </button>
     </PlayStage>

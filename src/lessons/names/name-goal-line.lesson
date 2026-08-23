@@ -4,10 +4,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This line at the end of the field, by the goal, is glowing.
+  caption This line runs across the end of the field, by the goal.
   draw goal-line left
   duration 400
 
@@ -17,4 +17,5 @@ question
   wrong Sideline
   wrong Halfway line
   wrong Center circle
+  correct Goal line.
   why The lines at each end are the goal lines. A goal only counts if the ball goes over this line into the net.

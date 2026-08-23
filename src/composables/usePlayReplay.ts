@@ -6,7 +6,6 @@ import type { Arrow, Drawing, Highlight, Keyframe, Player, Point, Team } from '@
 
 const KICK_MS = 1450
 const MOVE_MS = 800
-const STEP_PAUSE_MS = 500
 
 function prefersReducedMotion() {
   if (typeof window === 'undefined' || !window.matchMedia) return false
@@ -34,6 +33,7 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
   const kickerId = ref<string | null>(null)
   const instantMove = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
+  let waitResolve: (() => void) | undefined
   let raf = 0
   let runId = 0
 
@@ -50,8 +50,6 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
   const caption = computed(() => current.value?.caption ?? '')
 
   const restartLabel = computed(() => current.value?.restartLabel)
-
-  const forbidHands = computed(() => current.value?.forbidHands === true)
 
   const drawings = computed((): Drawing[] => current.value?.drawings ?? [])
 
@@ -84,6 +82,9 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
       clearTimeout(timer)
       timer = undefined
     }
+    const resolve = waitResolve
+    waitResolve = undefined
+    resolve?.()
     if (raf) {
       cancelAnimationFrame(raf)
       raf = 0
@@ -114,9 +115,15 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
         resolve()
         return
       }
+      waitResolve = () => {
+        waitResolve = undefined
+        resolve()
+      }
       timer = setTimeout(() => {
         timer = undefined
-        resolve()
+        const done = waitResolve
+        waitResolve = undefined
+        done?.()
       }, ms)
     })
   }
@@ -130,10 +137,8 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
   }
 
   async function hold(frame: Keyframe | undefined, moveMs: number, id: number) {
-    const pause = prefersReducedMotion() ? 50 : STEP_PAUSE_MS
-    await Promise.all([wait(moveMs, id), speak(frame?.caption ?? '')])
-    if (id !== runId) return
-    await wait(pause, id)
+    const caption = frame?.caption ?? ''
+    await Promise.all([wait(moveMs, id), caption ? speak(caption) : Promise.resolve()])
   }
 
   async function runLoop(id: number) {
@@ -154,21 +159,28 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     }
   }
 
-  function play() {
+  function startLoop(): Promise<void> {
+    isPlaying.value = true
+    const id = ++runId
+    return new Promise((resolve) => {
+      afterPaint(async () => {
+        instantMove.value = false
+        await runLoop(id)
+        resolve()
+      })
+    })
+  }
+
+  function play(): Promise<void> {
     clearTimer()
     if (list.value.length === 0) {
       finish()
-      return
+      return Promise.resolve()
     }
     if (isComplete.value || index.value >= lastIndex()) {
-      replay()
-      return
+      return replay()
     }
-    isPlaying.value = true
-    const id = ++runId
-    afterPaint(() => {
-      void runLoop(id)
-    })
+    return startLoop()
   }
 
   function pause() {
@@ -194,9 +206,7 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     isComplete.value = true
   }
 
-  function replay() {
-    runId += 1
-    const id = runId
+  function replay(): Promise<void> {
     clearTimer()
     cancel()
     instantMove.value = true
@@ -205,11 +215,19 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     kickTeam.value = null
     kickerId.value = null
     isComplete.value = false
-    isPlaying.value = true
-    afterPaint(() => {
-      instantMove.value = false
-      void runLoop(id)
-    })
+    return startLoop()
+  }
+
+  function skipStep() {
+    if (!isPlaying.value) return
+    cancel()
+    if (timer !== undefined) {
+      clearTimeout(timer)
+      timer = undefined
+    }
+    const resolve = waitResolve
+    waitResolve = undefined
+    resolve?.()
   }
 
   function reset() {
@@ -249,7 +267,6 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     caption,
     players,
     restartLabel,
-    forbidHands,
     drawings,
     arrows,
     kickFrom,
@@ -263,5 +280,6 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
     replay,
     reset,
     skipToEnd,
+    skipStep,
   }
 }

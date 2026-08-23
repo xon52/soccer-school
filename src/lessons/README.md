@@ -1,6 +1,6 @@
 # Lessons
 
-Each `*.lesson` file is one quiz: setup, animated steps, one question, optional steps after the answer.
+Each `*.lesson` file is one play: setup, animated steps, one or more questions, optional steps after the last answer.
 
 Put files in a **group folder**. The folder is the group; the file name (without `.lesson`) is the lesson id.
 
@@ -16,7 +16,7 @@ Cursor agents: follow `.cursor/skills/soccer-school-lessons/SKILL.md`.
 
 1. Copy a similar file in the matching group folder.
 2. Name the file after the lesson (`throw-in-to-goalie.lesson`). Set `title` and `intro`.
-3. Keep **one** `question` (prompt, one answer, three wrongs, why).
+3. Each `question` needs a prompt, one answer, three wrongs, a `correct` line (short praise, spoken on a hit), and a `why` (the teaching, spoken on a miss). Ask two questions about the same moment by putting two `question` blocks back to back.
 4. Group folders: `names`, `ball-out`, `goalie-hands`, or `fouls`.
 
 Files are loaded automatically. A syntax error prevents the app from starting. Do not write `group` or `id` in the file.
@@ -44,6 +44,7 @@ question
   wrong Blue
   wrong Nobody
   wrong Play on
+  correct Red's ball.
   why One or two kid-friendly sentences.
 
 step

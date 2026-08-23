@@ -20,11 +20,27 @@ const revealed = ref(false)
 const finished = ref(false)
 const groupId = ref<GroupId | null>(null)
 
-function prepareScenario(scenario: Scenario): SessionItem[] {
-  const play =
+/**
+ * Lessons in a group often open on the same line ("Look at the field…"). Say it
+ * on the first one, then drop it so the group does not repeat itself.
+ */
+function dropRepeatedLead(play: Play, spokenLeads: Set<string>): Play {
+  const lead = play.frames[0]
+  const caption = lead?.caption ?? ''
+  if (!lead || !caption) return play
+  if (!spokenLeads.has(caption)) {
+    spokenLeads.add(caption)
+    return play
+  }
+  return { ...play, frames: [{ ...lead, caption: '' }, ...play.frames.slice(1)] }
+}
+
+function prepareScenario(scenario: Scenario, spokenLeads: Set<string>): SessionItem[] {
+  const flipped =
     scenario.canFlipVertical && Math.random() >= 0.5
       ? flipPlayVertical(scenario.play)
       : scenario.play
+  const play = dropRepeatedLead(flipped, spokenLeads)
   const questions = scenario.questions.map(shuffleQuestion)
   return questions.map((question, layerIndex) => ({
     scenarioId: scenario.id,
@@ -56,7 +72,10 @@ export function useGroupSession() {
       return
     }
     groupId.value = nextGroupId
-    items.value = shuffleItems(group.scenarios).flatMap(prepareScenario)
+    const spokenLeads = new Set<string>()
+    items.value = shuffleItems(group.scenarios).flatMap((scenario) =>
+      prepareScenario(scenario, spokenLeads),
+    )
     index.value = 0
     score.value = 0
     revealed.value = false

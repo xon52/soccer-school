@@ -23,7 +23,17 @@ question
   wrong Blue
   wrong Nobody
   wrong Play on
+  correct Red's ball.
   why You last touched it over your own goal line, so Red gets the ball.
+
+question
+  prompt What restart is it?
+  answer Corner
+  wrong Throw-in
+  wrong Goal kick
+  wrong Kick-off
+  correct Corner kick.
+  why If you last touch it over your own goal line, they get a corner kick.
 
 step
   caption Red takes a corner kick from the corner of the field.

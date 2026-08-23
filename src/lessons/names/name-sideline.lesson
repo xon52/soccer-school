@@ -5,10 +5,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This long line along the side is glowing.
+  caption This long line runs all the way down the side.
   draw sideline bottom
   duration 400
 
@@ -18,4 +18,5 @@ question
   wrong Goal line
   wrong Halfway line
   wrong Penalty area
+  correct Sideline.
   why The long lines on the sides are the sidelines. If the ball goes over one, it is a throw-in.

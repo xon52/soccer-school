@@ -4,10 +4,10 @@ hide names
 hide ball
 
 step
-  caption Look at the field…
+  caption Look at the field. One part will glow yellow.
 
 step
-  caption This line that cuts the field in half is glowing.
+  caption This line cuts the field in half.
   draw halfway-line
   duration 400
 
@@ -17,4 +17,5 @@ question
   wrong Goal line
   wrong Sideline
   wrong Penalty area
+  correct Halfway line.
   why The halfway line splits the field into two halves. At kick-off, each team starts in their own half.
