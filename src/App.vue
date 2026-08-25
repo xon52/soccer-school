@@ -4,7 +4,7 @@ import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { useSpeech } from '@/composables/useSpeech'
 
 const route = useRoute()
-const playing = computed(() => route.name === 'play')
+const playing = computed(() => route.name === 'course')
 const { muted, toggleMute } = useSpeech()
 </script>
 

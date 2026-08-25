@@ -34,10 +34,3 @@ question
   wrong Kick-off
   correct Goal kick.
   why They last touched it over your goal line, so you restart with a goal kick.
-
-step
-  caption You get a goal kick from the box by your goal.
-  B-G to 8.4, 34
-  ball with B-G
-  draw goal-area left
-  banner Goal kick

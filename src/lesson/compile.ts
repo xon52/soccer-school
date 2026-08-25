@@ -1,5 +1,5 @@
 import { CENTER_M } from '@/field'
-import type { Arrow, Keyframe, Player, Point, Scenario } from '@/types'
+import type { Arrow, Keyframe, Lesson, Player, Point } from '@/types'
 import type { LessonBuilder, PointRef, StepBuilder } from '@/lesson/commands/types'
 import { teamFromTag } from '@/lesson/commands/types'
 import { LessonParseError } from '@/lesson/error'
@@ -96,7 +96,7 @@ function applyStep(players: Player[], ball: Point, step: StepBuilder) {
   return { players: next, ball: placed.ball }
 }
 
-export function compileLesson(builder: LessonBuilder): Scenario {
+export function compileLesson(builder: LessonBuilder): Lesson {
   let players = builder.lineup === '7v7' ? lineup7v7() : []
   for (const [tag, point] of builder.setupPlayers) {
     const existing = players.find((player) => player.id === tag)
@@ -121,17 +121,11 @@ export function compileLesson(builder: LessonBuilder): Scenario {
   let ball = start.ball
   warnSpacing(players, builder.id ?? 'lesson')
 
-  const frames: Keyframe[] = []
-  const outcome: Keyframe[] = []
-  const questionAt = builder.questions[0]?.at ?? builder.steps.length
-
-  builder.steps.forEach((step, index) => {
+  const frames: Keyframe[] = builder.steps.map((step) => {
     const applied = applyStep(players, ball, step)
     players = applied.players
     ball = applied.ball
-    const frame = snapshot(step, players, ball)
-    if (index < questionAt) frames.push(frame)
-    else outcome.push(frame)
+    return snapshot(step, players, ball)
   })
 
   return {
@@ -141,7 +135,6 @@ export function compileLesson(builder: LessonBuilder): Scenario {
       label: builder.title!,
       intro: builder.intro!,
       frames,
-      outcome: outcome.length ? outcome : undefined,
       hideNames: builder.hideNames || undefined,
       hideBall: builder.hideBall || undefined,
     },

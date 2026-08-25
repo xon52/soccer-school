@@ -34,21 +34,3 @@ question
   wrong Corner kick
   correct Use their feet.
   why They have to play it with their feet.
-
-step
-  caption The goalie cannot pick this one up.
-  B-CM to 27.3, 34
-  B-G to 9.5, 34
-  ball with B-G
-  label B-G Kick
-  no-hands B-G
-  draw penalty-area left
-
-step
-  caption They kick it away with their feet.
-  ball to 25.2, 27.2
-  arrow from B-G to ball
-  no-hands B-G
-  draw penalty-area left
-  banner No pickup
-  duration 1200

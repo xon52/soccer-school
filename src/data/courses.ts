@@ -1,44 +1,44 @@
 import { loadLessons } from '@/lesson/load'
-import type { Group, GroupId } from '@/types'
+import type { Course, CourseId } from '@/types'
 
 const fileLessons = loadLessons()
 
-function scenariosFor(id: GroupId) {
-  return fileLessons.filter((lesson) => lesson.group === id).map((lesson) => lesson.scenario)
+function lessonsFor(id: CourseId) {
+  return fileLessons.filter((item) => item.course === id).map((item) => item.lesson)
 }
 
-export const groups: Group[] = [
+export const courses: Course[] = [
   {
     id: 'names',
     title: 'Name the field',
     blurb: 'A line or box lights up. Pick what it is called.',
-    scenarios: scenariosFor('names'),
+    lessons: lessonsFor('names'),
   },
   {
     id: 'ball-out',
     title: 'Ball out',
     blurb: 'Watch where the ball goes. Who gets it, and how does play start again?',
-    scenarios: scenariosFor('ball-out'),
+    lessons: lessonsFor('ball-out'),
   },
   {
     id: 'goalie-hands',
     title: 'Goalie hands',
     blurb: 'When can the goalie pick the ball up — and what should they do next?',
-    scenarios: scenariosFor('goalie-hands'),
+    lessons: lessonsFor('goalie-hands'),
   },
   {
     id: 'fouls',
     title: 'Fouls',
     blurb: 'Pushes, trips, and handballs. Coming soon.',
     comingSoon: true,
-    scenarios: [],
+    lessons: [],
   },
 ]
 
-export function getGroup(id: string) {
-  return groups.find((group) => group.id === id)
+export function getCourse(id: string) {
+  return courses.find((course) => course.id === id)
 }
 
-export function isGroupId(id: string): id is GroupId {
-  return groups.some((group) => group.id === id)
+export function isCourseId(id: string): id is CourseId {
+  return courses.some((course) => course.id === id)
 }

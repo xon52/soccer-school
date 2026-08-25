@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { getGroup, isGroupId } from '@/data/groups'
-import { useGroupSession } from '@/composables/useGroupSession'
+import { getCourse, isCourseId } from '@/data/courses'
+import { useCourseSession } from '@/composables/useCourseSession'
 import { useProgress } from '@/composables/useProgress'
 import { useSpeech } from '@/composables/useSpeech'
-import type { GroupId } from '@/types'
+import type { CourseId } from '@/types'
 
 const props = defineProps<{
-  groupId: string
+  courseId: string
 }>()
 
 const router = useRouter()
-const { score, total, finished, start } = useGroupSession()
+const { score, total, finished, start } = useCourseSession()
 const { clearScore } = useProgress()
 const { unlock } = useSpeech()
-const group = computed(() => getGroup(props.groupId))
+const course = computed(() => getCourse(props.courseId))
 
 onMounted(async () => {
-  if (!isGroupId(props.groupId) || !finished.value || total.value === 0) {
+  if (!isCourseId(props.courseId) || !finished.value || total.value === 0) {
     await router.replace({ name: 'home' })
   }
 })
@@ -28,27 +28,27 @@ const message = computed(() => {
   if (score.value >= Math.ceil(total.value * 0.7)) {
     return 'Great job. Try again if you want to beat your score.'
   }
-  return 'Good try. Watch the plays one more time and have another go.'
+  return 'Good try. Watch the lessons one more time and have another go.'
 })
 
 async function tryAgain() {
-  if (!isGroupId(props.groupId)) return
-  const id: GroupId = props.groupId
+  if (!isCourseId(props.courseId)) return
+  const id: CourseId = props.courseId
   unlock()
   clearScore(id)
   start(id)
-  await router.push({ name: 'play', params: { groupId: id } })
+  await router.push({ name: 'course', params: { courseId: id } })
 }
 </script>
 
 <template>
-  <section v-if="finished && group" class="results">
-    <p class="kicker">{{ group.title }} complete</p>
+  <section v-if="finished && course" class="results">
+    <p class="kicker">{{ course.title }} complete</p>
     <h1>{{ score }} / {{ total }}</h1>
     <p class="lead">{{ message }}</p>
     <div class="cta">
       <button class="btn primary" type="button" @click="tryAgain">Try again</button>
-      <RouterLink class="btn" to="/">Home</RouterLink>
+      <RouterLink class="btn" to="/">Pick another course</RouterLink>
     </div>
   </section>
 </template>

@@ -4,7 +4,6 @@ defineProps<{
   revealed?: boolean
   selected?: boolean
   correct?: boolean
-  locked?: boolean
 }>()
 
 defineEmits<{
@@ -22,7 +21,7 @@ defineEmits<{
       yes: revealed && correct,
       no: revealed && selected && !correct,
     }"
-    :disabled="revealed || locked"
+    :disabled="revealed"
     @click="$emit('choose')"
   >
     {{ label }}
@@ -66,5 +65,12 @@ defineEmits<{
 
 .choice:disabled {
   cursor: default;
+}
+
+@media (max-height: 620px) {
+  .choice {
+    min-height: 2.8rem;
+    padding: 0.5rem;
+  }
 }
 </style>

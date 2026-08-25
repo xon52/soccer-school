@@ -21,6 +21,31 @@ function safetyMs(text: string) {
   return Math.min(20_000, Math.max(8_000, words * 800 + 2_000))
 }
 
+/**
+ * Chrome and Safari load voices asynchronously, and an utterance queued before
+ * they arrive is dropped. Without this the very first caption of a session is
+ * silent.
+ */
+function voicesReady(speech: SpeechSynthesis): Promise<void> {
+  if (speech.getVoices().length > 0) return Promise.resolve()
+  return new Promise((resolve) => {
+    let settled = false
+    const done = () => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timer)
+      window.clearInterval(poll)
+      speech.removeEventListener('voiceschanged', done)
+      resolve()
+    }
+    const timer = window.setTimeout(done, 1500)
+    const poll = window.setInterval(() => {
+      if (speech.getVoices().length > 0) done()
+    }, 100)
+    speech.addEventListener('voiceschanged', done)
+  })
+}
+
 export function useSpeech() {
   function cancel() {
     speakGen += 1
@@ -81,13 +106,15 @@ export function useSpeech() {
       }
       utterance.onerror = () => finish()
 
-      window.setTimeout(() => {
-        if (gen !== speakGen) {
-          finish()
-          return
-        }
-        speech.speak(utterance)
-      }, 50)
+      void voicesReady(speech).then(() => {
+        window.setTimeout(() => {
+          if (gen !== speakGen) {
+            finish()
+            return
+          }
+          speech.speak(utterance)
+        }, 50)
+      })
     })
   }
 

@@ -8,16 +8,16 @@ description: >-
 
 # Soccer School lessons
 
-Lessons are **one file, one play**. A play can ask **one or more questions** on the same moment. Do not add plays in TypeScript. Copy a similar file in `src/lessons/<group>/` and edit it.
+A **course** is a folder of lessons and scores as one run. A lesson is **one file, one play**. A play can ask **one or more questions** on the same moment. Do not add plays in TypeScript. Copy a similar file in `src/lessons/<course>/` and edit it.
 
 Glob load: `src/lessons/**/*.lesson` via `src/lesson/load.ts`. A parse error crashes app load.
 
-**Path is identity:** `src/lessons/<group>/<name>.lesson`
+**Path is identity:** `src/lessons/<course>/<name>.lesson`
 
-- Folder = group (`names`, `ball-out`, `goalie-hands`, `fouls`)
+- Folder = course (`names`, `ball-out`, `goalie-hands`, `fouls`)
 - File name (no `.lesson`) = lesson id, e.g. `throw-in-to-goalie.lesson`
 
-Do not put `group` or `id` in the file.
+Do not put `course` or `id` in the file.
 
 ## File shape
 
@@ -60,15 +60,11 @@ question
   wrong Kick-off
   correct Throw-in.
   why Over the sideline, the other team throws it back in.
-
-step
-  caption Red throws it back onto the field.
-  ...
 ```
 
 `#` starts a comment. Indentation is optional. `#` to end of line.
 
-**Order:** header → optional `setup` → one or more `step` → one or more `question` → optional more `step`s (shown after the last answer). At least one `step` must come **before** the first question.
+**Order:** header → optional `setup` → one or more `step` → one or more `question`. At least one `step` must come **before** the first question, and a `step` after a `question` is a parse error — the lesson ends on the last answer and the app moves straight to the next question.
 
 ## Header
 
@@ -80,7 +76,7 @@ step
 | `hide names` | Hide "Your goal" / sideline labels |
 | `hide ball` | Hide the ball (name-the-field) |
 
-New group: add the slug to `GROUP_IDS` in `src/types.ts`, a folder `src/lessons/<group>/`, and a card in `src/data/groups.ts` (clear `comingSoon` if it was a placeholder).
+New course: add the slug to `COURSE_IDS` in `src/types.ts`, a folder `src/lessons/<course>/`, and a card in `src/data/courses.ts` (clear `comingSoon` if it was a placeholder).
 
 ## Coords
 
@@ -113,7 +109,7 @@ ball at 33.6, 21.8
 
 Unmentioned players stay put. Drawings and arrows are **per-step** (repeat them if they should stay). Positions, labels, and `hands` persist.
 
-The first step's caption is the lead-in. If several lessons in a group share a **byte-identical** lead-in caption, only the first one in a session speaks it — that is how a group gives a one-time instruction (`Look at the field. One part will glow yellow.`) without repeating it every play. Do not restate that instruction in the later steps.
+The first step's caption is the lead-in. If several lessons in a course share a **byte-identical** lead-in caption, only the first one in a session speaks it — that is how a course gives a one-time instruction (`Look at the field. One part will glow yellow.`) without repeating it every play. Do not restate that instruction in the later steps.
 
 | Command | Notes |
 |---|---|
@@ -164,7 +160,7 @@ Kids ~8–10. You are blue. Captions, `correct`, and `why` should be short and c
 
 ## After writing
 
-1. `npm run type-check` — import of a bad file throws at load.
-2. Run the app, open that group, confirm the play starts, answer, confirm leftover steps.
+1. `pnpm type-check` — import of a bad file throws at load.
+2. Run the app, open that course, confirm the play starts, and answer both while the clip is still running and after it finishes.
 
 Templates: action play → `src/lessons/ball-out/throw-in-blue-out.lesson`. Field names → `src/lessons/names/name-sideline.lesson`. Goalie → `src/lessons/goalie-hands/hands-ok.lesson`.

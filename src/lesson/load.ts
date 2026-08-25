@@ -1,4 +1,4 @@
-import { GROUP_IDS, type GroupId, type Scenario } from '@/types'
+import { COURSE_IDS, type CourseId, type Lesson } from '@/types'
 import { compileLesson } from '@/lesson/compile'
 import { parseLesson } from '@/lesson/parse'
 
@@ -8,8 +8,8 @@ const files = import.meta.glob<string>('../lessons/**/*.lesson', {
   import: 'default',
 })
 
-function isGroupId(value: string): value is GroupId {
-  return (GROUP_IDS as readonly string[]).includes(value)
+function isCourseId(value: string): value is CourseId {
+  return (COURSE_IDS as readonly string[]).includes(value)
 }
 
 function lessonPathParts(path: string) {
@@ -17,30 +17,30 @@ function lessonPathParts(path: string) {
   const match = /(?:^|\/)lessons\/([^/]+)\/([^/]+)\.lesson$/.exec(normalized)
   if (!match?.[1] || !match[2]) {
     throw new Error(
-      `${path}: lessons must live in src/lessons/<group>/<name>.lesson (folder is the group, file name is the id)`,
+      `${path}: lessons must live in src/lessons/<course>/<name>.lesson (folder is the course, file name is the id)`,
     )
   }
-  return { group: match[1], id: match[2] }
+  return { course: match[1], id: match[2] }
 }
 
 export interface LoadedLesson {
-  group: GroupId
-  scenario: Scenario
+  course: CourseId
+  lesson: Lesson
   source: string
 }
 
 export function loadLessons(): LoadedLesson[] {
   return Object.entries(files).map(([path, source]) => {
-    const { group, id } = lessonPathParts(path)
-    if (!isGroupId(group)) {
-      throw new Error(`${path}: unknown group folder "${group}"`)
+    const { course, id } = lessonPathParts(path)
+    if (!isCourseId(course)) {
+      throw new Error(`${path}: unknown course folder "${course}"`)
     }
     const builder = parseLesson(source)
-    builder.group = group
+    builder.course = course
     builder.id = id
     return {
-      group,
-      scenario: compileLesson(builder),
+      course,
+      lesson: compileLesson(builder),
       source: path,
     }
   })

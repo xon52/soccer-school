@@ -32,19 +32,3 @@ question
   wrong Goal kick
   correct Use their feet.
   why Outside the box they must use their feet, like anyone else.
-
-step
-  caption The goalie has to use their feet.
-  ball with B-G
-  label B-G Kick
-  no-hands B-G
-  draw penalty-area left
-
-step
-  caption They kick it away — no hands.
-  ball to 44.1, 27.2
-  arrow from B-G to ball
-  no-hands B-G
-  draw penalty-area left
-  banner No hands
-  duration 1200

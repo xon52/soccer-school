@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import QuizChoice from '@/components/QuizChoice.vue'
 import SoccerField from '@/components/SoccerField.vue'
 import { usePlayReplay } from '@/composables/usePlayReplay'
@@ -10,7 +10,6 @@ import type { Play, Question } from '@/types'
 const props = defineProps<{
   play: Play
   question: Question
-  isLastLayer: boolean
 }>()
 
 const emit = defineEmits<{
@@ -22,19 +21,12 @@ type Phase = 'asking' | 'done'
 
 const phase = ref<Phase>('asking')
 const chosen = ref<number | null>(null)
-const showingOutcome = ref(false)
-const introReady = ref(false)
-let playGen = 0
-let continueGen = 0
+let introGen = 0
+let feedbackGen = 0
 
 const { unlock, speak } = useSpeech()
 
-const frames = computed(() => {
-  if (showingOutcome.value && props.play.outcome?.length) {
-    return props.play.outcome
-  }
-  return props.play.frames
-})
+const frames = computed(() => props.play.frames)
 
 const {
   ball,
@@ -50,7 +42,6 @@ const {
   drawings,
   arrows,
   isPlaying,
-  play: startPlay,
   replay,
   skipToEnd,
   skipStep,
@@ -59,41 +50,27 @@ const {
 watch(
   () => props.question,
   (question) => {
-    playGen += 1
-    continueGen += 1
+    introGen += 1
+    feedbackGen += 1
     chosen.value = null
-    showingOutcome.value = false
     phase.value = 'asking'
-    introReady.value = true
     skipToEnd()
     speak(question.prompt)
   },
 )
 
-async function runContextThenAsk() {
-  const gen = ++playGen
-  introReady.value = false
-  showingOutcome.value = false
+/** Run the clip, then ask. Choices stay live the whole time. */
+async function runIntro() {
+  const gen = ++introGen
   await replay()
-  if (gen !== playGen) return
-  introReady.value = true
+  if (gen !== introGen || phase.value !== 'asking') return
   await speak(props.question.prompt)
-  if (gen !== playGen) return
-  if (phase.value === 'done' && answeredRight.value) {
-    if (props.isLastLayer && props.play.outcome?.length) {
-      showingOutcome.value = true
-      await nextTick()
-      await startPlay()
-    }
-    if (gen !== playGen) return
-    emit('continue')
-  }
 }
 
 function watchPlay() {
   unlock()
-  continueGen += 1
-  void runContextThenAsk()
+  feedbackGen += 1
+  void runIntro()
 }
 
 function skip() {
@@ -102,34 +79,25 @@ function skip() {
 }
 
 onMounted(() => {
-  void runContextThenAsk()
+  void runIntro()
 })
 
 async function choose(choiceIndex: number) {
-  if (!introReady.value || chosen.value !== null || phase.value !== 'asking') return
+  if (chosen.value !== null || phase.value !== 'asking') return
+  unlock()
+  introGen += 1
+  skipToEnd()
   chosen.value = choiceIndex
   const correct = choiceIndex === props.question.correctIndex
   emit('answered', correct)
   phase.value = 'done'
-  const myContinue = continueGen
+  const myFeedback = ++feedbackGen
   if (correct) {
     await speak(hitSpeech(props.question))
-    if (myContinue !== continueGen) return
-    if (props.isLastLayer && props.play.outcome?.length) {
-      showingOutcome.value = true
-      await nextTick()
-      await startPlay()
-    }
-    if (myContinue !== continueGen) return
+    if (myFeedback !== feedbackGen) return
     emit('continue')
   } else {
     await speak(props.question.why)
-    if (myContinue !== continueGen) return
-    if (props.isLastLayer && props.play.outcome?.length) {
-      showingOutcome.value = true
-      await nextTick()
-      await startPlay()
-    }
   }
 }
 
@@ -190,7 +158,6 @@ const fallbackLabel = computed(() => {
           :revealed="chosen !== null"
           :selected="chosen === index"
           :correct="index === question.correctIndex"
-          :locked="!introReady"
           @choose="choose(index)"
         />
       </div>
@@ -211,12 +178,25 @@ const fallbackLabel = computed(() => {
 .stage {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
-  gap: 0.8rem;
-  min-height: calc(100dvh - 5.5rem);
+  gap: 0.6rem;
+  height: 100%;
+  min-height: 0;
 }
 
+.stage :deep(.pitch-wrap) {
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+/*
+ * The field gives up whatever height the dock needs. `align-self: center` keeps
+ * its height auto so the max-height clamp shrinks the width with it instead of
+ * stretching the box and letterboxing the drawing.
+ */
 .stage :deep(.pitch) {
-  max-height: min(52dvh, 560px);
+  max-height: 100%;
+  align-self: center;
+  justify-self: center;
 }
 
 .dock {
@@ -302,9 +282,14 @@ const fallbackLabel = computed(() => {
   }
 }
 
-@media (min-height: 800px) {
-  .stage :deep(.pitch) {
-    max-height: min(58dvh, 640px);
+@media (max-height: 620px) {
+  .dock {
+    padding: 0.6rem 0.75rem 0.7rem;
+    gap: 0.5rem;
+  }
+
+  .fallback {
+    font-size: 0.85rem;
   }
 }
 </style>

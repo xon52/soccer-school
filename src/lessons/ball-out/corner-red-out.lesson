@@ -34,11 +34,3 @@ question
   wrong Kick-off
   correct Corner kick.
   why If they last touch it over their own goal line, you get a corner kick.
-
-step
-  caption You get a corner kick from the corner of their end.
-  B-LF to 102.9, 1.4
-  ball with B-LF
-  label B-LF Corner
-  draw goal-line right
-  banner Corner kick

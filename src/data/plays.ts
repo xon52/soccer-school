@@ -15,6 +15,5 @@ export function flipPlayVertical(play: Play): Play {
   return {
     ...play,
     frames: flipFrames(play.frames),
-    outcome: play.outcome ? flipFrames(play.outcome) : undefined,
   }
 }

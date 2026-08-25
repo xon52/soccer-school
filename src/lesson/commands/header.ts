@@ -7,8 +7,11 @@ function requireText(rest: string, line: { no: number }, what: string) {
 }
 
 export const headerHandlers: Record<string, CommandHandler> = {
+  course(line) {
+    throw new LessonParseError('course comes from the folder name, not a command', line.no)
+  },
   group(line) {
-    throw new LessonParseError('group comes from the folder name, not a command', line.no)
+    throw new LessonParseError('course comes from the folder name, not a command', line.no)
   },
   id(line) {
     throw new LessonParseError('id comes from the file name, not a command', line.no)

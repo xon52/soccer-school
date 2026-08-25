@@ -33,12 +33,3 @@ question
   wrong Corner
   correct Kick-off.
   why Play starts again with a kick-off from the center circle.
-
-step
-  caption You got scored on, so YOU kick off from the center.
-  B-RF to 52.5, 34
-  R-LF to 60.9, 34
-  ball with B-RF
-  label B-RF Kick-off
-  draw center-circle
-  banner Kick-off

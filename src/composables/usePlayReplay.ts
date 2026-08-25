@@ -19,6 +19,18 @@ function frameDuration(frame: Keyframe | undefined) {
   return frame.kick ? KICK_MS : MOVE_MS
 }
 
+/**
+ * How long a caption needs to be read. Speech is unreliable — muted, voiceless,
+ * or erroring on the first utterance of a session — so the clip paces itself
+ * off the text and only waits longer when a real voice runs longer.
+ */
+function captionDuration(caption: string) {
+  if (!caption.trim()) return 0
+  if (prefersReducedMotion()) return 50
+  const words = caption.trim().split(/\s+/).filter(Boolean).length
+  return Math.min(6_000, Math.max(900, words * 330 + 500))
+}
+
 function holderOf(frame: Keyframe | undefined) {
   return frame?.players?.find((player) => player.hasBall)
 }
@@ -138,7 +150,8 @@ export function usePlayReplay(frames: MaybeRefOrGetter<Keyframe[]>) {
 
   async function hold(frame: Keyframe | undefined, moveMs: number, id: number) {
     const caption = frame?.caption ?? ''
-    await Promise.all([wait(moveMs, id), caption ? speak(caption) : Promise.resolve()])
+    const holdMs = Math.max(moveMs, captionDuration(caption))
+    await Promise.all([wait(holdMs, id), caption ? speak(caption) : Promise.resolve()])
   }
 
   async function runLoop(id: number) {

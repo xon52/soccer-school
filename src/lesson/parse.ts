@@ -63,6 +63,12 @@ export function parseLesson(source: string): LessonBuilder {
         builder.setupSeen = true
         mode = 'setup'
       } else if (type === 'step') {
+        if (builder.questions.length > 0) {
+          throw new LessonParseError(
+            'every step must come before the questions; the lesson ends on the last answer',
+            line.no,
+          )
+        }
         mode = 'step'
         builder.steps.push(emptyStep())
       } else {
