@@ -29,7 +29,7 @@ export interface StepBuilder {
 }
 
 export interface LessonBuilder {
-  group?: string
+  course?: string
   id?: string
   title?: string
   intro?: string

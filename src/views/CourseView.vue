@@ -2,39 +2,29 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PlayStage from '@/components/PlayStage.vue'
-import { getGroup, isGroupId } from '@/data/groups'
-import { useGroupSession } from '@/composables/useGroupSession'
+import { getCourse, isCourseId } from '@/data/courses'
+import { useCourseSession } from '@/composables/useCourseSession'
 import { useSpeech } from '@/composables/useSpeech'
 
 const props = defineProps<{
-  groupId: string
+  courseId: string
 }>()
 
 const router = useRouter()
-const {
-  current,
-  total,
-  questionNumber,
-  revealed,
-  isLast,
-  isLastLayer,
-  start,
-  recordAnswer,
-  next,
-  finished,
-} = useGroupSession()
+const { current, total, questionNumber, revealed, isLast, start, recordAnswer, next, finished } =
+  useCourseSession()
 const { unlock, cancel } = useSpeech()
 
-const group = computed(() => getGroup(props.groupId))
+const course = computed(() => getCourse(props.courseId))
 
 const lastCorrect = ref(false)
 
 onMounted(async () => {
-  if (!isGroupId(props.groupId) || group.value?.comingSoon) {
+  if (!isCourseId(props.courseId) || course.value?.comingSoon) {
     await router.replace({ name: 'home' })
     return
   }
-  start(props.groupId)
+  start(props.courseId)
 })
 
 function onAnswered(correct: boolean) {
@@ -48,20 +38,19 @@ async function onNext() {
   unlock()
   next()
   if (finished.value) {
-    await router.push({ name: 'results', params: { groupId: props.groupId } })
+    await router.push({ name: 'results', params: { courseId: props.courseId } })
   }
 }
 </script>
 
 <template>
-  <section v-if="current && group" class="play">
-    <p class="progress">{{ group.title }} · Question {{ questionNumber }} of {{ total }}</p>
+  <section v-if="current && course" class="play">
+    <p class="progress">{{ course.title }} · Question {{ questionNumber }} of {{ total }}</p>
 
     <PlayStage
-      :key="current.scenarioId"
+      :key="current.lessonId"
       :play="current.play"
       :question="current.question"
-      :is-last-layer="isLastLayer"
       @answered="onAnswered"
       @continue="onNext"
     >
@@ -75,7 +64,10 @@ async function onNext() {
 <style scoped>
 .play {
   display: grid;
-  gap: 0.7rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.5rem;
+  min-height: 0;
+  height: 100%;
 }
 
 .progress {

@@ -34,11 +34,3 @@ question
   wrong Kick-off
   correct Corner kick.
   why If you last touch it over your own goal line, they get a corner kick.
-
-step
-  caption Red takes a corner kick from the corner of the field.
-  R-LB to 2.1, 66.6
-  ball with R-LB
-  label R-LB Corner
-  draw goal-line left
-  banner Corner kick

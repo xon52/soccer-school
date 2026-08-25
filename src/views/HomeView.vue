@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { groups } from '@/data/groups'
+import { courses } from '@/data/courses'
 import { useProgress } from '@/composables/useProgress'
 import { useSpeech } from '@/composables/useSpeech'
-import type { GroupId } from '@/types'
+import type { CourseId } from '@/types'
 
 const { scoreFor } = useProgress()
 const { unlock } = useSpeech()
 
-function scoreLabel(groupId: GroupId) {
-  const score = scoreFor(groupId)
+function scoreLabel(courseId: CourseId) {
+  const score = scoreFor(courseId)
   if (!score) return null
   return `${score.correct} / ${score.total}`
 }
@@ -17,24 +17,24 @@ function scoreLabel(groupId: GroupId) {
 
 <template>
   <section class="hub">
-    <h1 class="lead">An interactive quiz to learn the rules of soccer.</h1>
+    <h1 class="lead">Pick a course and learn the rules of soccer.</h1>
 
     <div class="cards">
-      <template v-for="group in groups" :key="group.id">
-        <p v-if="group.comingSoon" class="hub-card soon">
-          <strong>{{ group.title }}</strong>
-          <span>{{ group.blurb }}</span>
+      <template v-for="course in courses" :key="course.id">
+        <p v-if="course.comingSoon" class="hub-card soon">
+          <strong>{{ course.title }}</strong>
+          <span>{{ course.blurb }}</span>
           <em>Coming soon</em>
         </p>
         <RouterLink
           v-else
           class="hub-card"
-          :to="{ name: 'play', params: { groupId: group.id } }"
+          :to="{ name: 'course', params: { courseId: course.id } }"
           @click="unlock"
         >
-          <strong>{{ group.title }}</strong>
-          <span>{{ group.blurb }}</span>
-          <em v-if="scoreLabel(group.id)">{{ scoreLabel(group.id) }}</em>
+          <strong>{{ course.title }}</strong>
+          <span>{{ course.blurb }}</span>
+          <em v-if="scoreLabel(course.id)">{{ scoreLabel(course.id) }}</em>
         </RouterLink>
       </template>
     </div>

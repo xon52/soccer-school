@@ -38,17 +38,3 @@ question
   wrong Take a corner
   correct Throw it or kick it out.
   why After a catch, the goalie can throw it or drop it and kick it. They cannot run the whole field holding it.
-
-step
-  caption The goalie has the ball in their hands.
-  label B-G Throw
-  draw penalty-area left
-
-step
-  caption They throw it out to a teammate. Play goes on!
-  B-LB to 29.4, 23.1
-  ball with B-LB
-  arrow from B-G to ball
-  draw penalty-area left
-  banner Throw out
-  duration 1200

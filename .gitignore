@@ -38,6 +38,9 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# vite-plugin-pwa dev output
+dev-dist
+
 # Cloudflare Wrangler
 .wrangler
 .dev.vars*

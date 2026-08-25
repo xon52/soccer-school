@@ -34,18 +34,3 @@ question
   wrong Kick-off
   correct Throw-in.
   why Over the sideline, the other team throws it back in.
-
-step
-  caption Red is ready to throw it back in.
-  R-LB to 71.4, 66.6
-  ball with R-LB
-  label R-LB Throw
-  draw sideline bottom
-
-step
-  caption Red throws it back onto the field.
-  ball to 65.1, 55.8
-  arrow from R-LB to ball
-  banner Throw-in
-  draw sideline bottom
-  duration 1100

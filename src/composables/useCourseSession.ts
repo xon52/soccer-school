@@ -1,16 +1,14 @@
 import { computed, ref } from 'vue'
-import { getGroup } from '@/data/groups'
+import { getCourse } from '@/data/courses'
 import { flipPlayVertical } from '@/data/plays'
 import { shuffleItems, shuffleQuestion } from '@/data/shuffle'
 import { useProgress } from '@/composables/useProgress'
-import type { GroupId, Play, Question, Scenario } from '@/types'
+import type { CourseId, Lesson, Play, Question } from '@/types'
 
 export interface SessionItem {
-  scenarioId: string
+  lessonId: string
   play: Play
   question: Question
-  layerIndex: number
-  layerCount: number
 }
 
 const items = ref<SessionItem[]>([])
@@ -18,11 +16,11 @@ const index = ref(0)
 const score = ref(0)
 const revealed = ref(false)
 const finished = ref(false)
-const groupId = ref<GroupId | null>(null)
+const courseId = ref<CourseId | null>(null)
 
 /**
- * Lessons in a group often open on the same line ("Look at the field…"). Say it
- * on the first one, then drop it so the group does not repeat itself.
+ * Lessons in a course often open on the same line ("Look at the field…"). Say it
+ * on the first one, then drop it so the course does not repeat itself.
  */
 function dropRepeatedLead(play: Play, spokenLeads: Set<string>): Play {
   const lead = play.frames[0]
@@ -35,46 +33,36 @@ function dropRepeatedLead(play: Play, spokenLeads: Set<string>): Play {
   return { ...play, frames: [{ ...lead, caption: '' }, ...play.frames.slice(1)] }
 }
 
-function prepareScenario(scenario: Scenario, spokenLeads: Set<string>): SessionItem[] {
+function prepareLesson(lesson: Lesson, spokenLeads: Set<string>): SessionItem[] {
   const flipped =
-    scenario.canFlipVertical && Math.random() >= 0.5
-      ? flipPlayVertical(scenario.play)
-      : scenario.play
+    lesson.canFlipVertical && Math.random() >= 0.5 ? flipPlayVertical(lesson.play) : lesson.play
   const play = dropRepeatedLead(flipped, spokenLeads)
-  const questions = scenario.questions.map(shuffleQuestion)
-  return questions.map((question, layerIndex) => ({
-    scenarioId: scenario.id,
+  return lesson.questions.map(shuffleQuestion).map((question) => ({
+    lessonId: lesson.id,
     play,
     question,
-    layerIndex,
-    layerCount: questions.length,
   }))
 }
 
-export function useGroupSession() {
+export function useCourseSession() {
   const { saveScore } = useProgress()
   const current = computed(() => items.value[index.value])
   const total = computed(() => items.value.length)
   const questionNumber = computed(() => index.value + 1)
   const isLast = computed(() => index.value >= total.value - 1)
-  const isLastLayer = computed(() => {
-    const item = current.value
-    if (!item) return true
-    return item.layerIndex >= item.layerCount - 1
-  })
 
-  function start(nextGroupId: GroupId) {
-    const group = getGroup(nextGroupId)
-    if (!group || group.comingSoon || group.scenarios.length === 0) {
+  function start(nextCourseId: CourseId) {
+    const course = getCourse(nextCourseId)
+    if (!course || course.comingSoon || course.lessons.length === 0) {
       items.value = []
-      groupId.value = null
+      courseId.value = null
       finished.value = false
       return
     }
-    groupId.value = nextGroupId
+    courseId.value = nextCourseId
     const spokenLeads = new Set<string>()
-    items.value = shuffleItems(group.scenarios).flatMap((scenario) =>
-      prepareScenario(scenario, spokenLeads),
+    items.value = shuffleItems(course.lessons).flatMap((lesson) =>
+      prepareLesson(lesson, spokenLeads),
     )
     index.value = 0
     score.value = 0
@@ -92,7 +80,7 @@ export function useGroupSession() {
     if (!revealed.value) return
     if (isLast.value) {
       finished.value = true
-      if (groupId.value) saveScore(groupId.value, score.value, total.value)
+      if (courseId.value) saveScore(courseId.value, score.value, total.value)
       return
     }
     index.value += 1
@@ -100,7 +88,7 @@ export function useGroupSession() {
   }
 
   function reset() {
-    if (groupId.value) start(groupId.value)
+    if (courseId.value) start(courseId.value)
   }
 
   return {
@@ -109,12 +97,11 @@ export function useGroupSession() {
     score,
     revealed,
     finished,
-    groupId,
+    courseId,
     current,
     total,
     questionNumber,
     isLast,
-    isLastLayer,
     start,
     recordAnswer,
     next,

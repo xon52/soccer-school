@@ -8,8 +8,8 @@ export type Highlight =
   | 'centerCircle'
   | 'halfwayLine'
   | 'penaltySpot'
-export const GROUP_IDS = ['names', 'ball-out', 'goalie-hands', 'fouls'] as const
-export type GroupId = (typeof GROUP_IDS)[number]
+export const COURSE_IDS = ['names', 'ball-out', 'goalie-hands', 'fouls'] as const
+export type CourseId = (typeof COURSE_IDS)[number]
 
 export interface Point {
   x: number
@@ -58,7 +58,6 @@ export interface Play {
   label: string
   intro: string
   frames: Keyframe[]
-  outcome?: Keyframe[]
   hideNames?: boolean
   hideBall?: boolean
 }
@@ -71,22 +70,22 @@ export interface Question {
   why: string
 }
 
-export interface Scenario {
+export interface Lesson {
   id: string
   play: Play
   questions: Question[]
   canFlipVertical?: boolean
 }
 
-export interface Group {
-  id: GroupId
+export interface Course {
+  id: CourseId
   title: string
   blurb: string
   comingSoon?: boolean
-  scenarios: Scenario[]
+  lessons: Lesson[]
 }
 
-export interface GroupScore {
+export interface CourseScore {
   correct: number
   total: number
 }

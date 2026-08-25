@@ -22,22 +22,38 @@ body {
 }
 
 #app {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 1rem 1rem 2.5rem;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 2.5rem
+    max(1rem, env(safe-area-inset-left));
 }
 
+/*
+ * A tablet in landscape loses the top of the viewport to the browser bar and
+ * the bottom to the system bar, so the play screen takes 90% of what is left
+ * and fits inside it instead of scrolling.
+ */
 .app-shell.playing {
-  padding-bottom: 1rem;
+  height: 90dvh;
+  min-height: 0;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
 }
 
 .app-shell.playing .topbar {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-shell.playing .page {
+  min-height: 0;
+  height: 100%;
 }
 
 .topbar {

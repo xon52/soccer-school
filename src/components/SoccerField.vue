@@ -359,15 +359,15 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
         <circle
           v-if="player.hasBall && player.role !== 'goalkeeper'"
           class="possession-ring"
-          r="19"
+          r="20"
         />
         <rect
           v-if="player.hasBall && player.role === 'goalkeeper'"
           class="possession-ring"
-          x="-19"
-          y="-19"
-          width="38"
-          height="38"
+          x="-20"
+          y="-20"
+          width="40"
+          height="40"
           rx="8"
         />
         <rect
@@ -428,15 +428,15 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
         <circle
           v-if="player.hasBall && player.role !== 'goalkeeper'"
           class="possession-ring"
-          r="19"
+          r="20"
         />
         <rect
           v-if="player.hasBall && player.role === 'goalkeeper'"
           class="possession-ring"
-          x="-19"
-          y="-19"
-          width="38"
-          height="38"
+          x="-20"
+          y="-20"
+          width="40"
+          height="40"
           rx="8"
         />
         <rect
@@ -561,7 +561,7 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
 .possession-ring {
   fill: none;
   stroke: #facc15;
-  stroke-width: 2;
+  stroke-width: 5;
 }
 
 .kick-arrow {
@@ -700,6 +700,17 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
 .swatch.ball {
   background: transparent;
   border-color: #facc15;
+}
+
+@media (max-height: 620px) {
+  .pitch-wrap {
+    gap: 0.35rem;
+  }
+
+  .legend {
+    gap: 0.7rem;
+    font-size: 0.8rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
