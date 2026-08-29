@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { courses } from '@/data/courses'
+import { useFeedback } from '@/composables/useFeedback'
 import { useProgress } from '@/composables/useProgress'
 import { useSpeech } from '@/composables/useSpeech'
 import type { CourseId } from '@/types'
 
 const { scoreFor } = useProgress()
 const { unlock } = useSpeech()
+const { open: openFeedback } = useFeedback()
 
 function scoreLabel(courseId: CourseId) {
   const score = scoreFor(courseId)
@@ -38,6 +40,10 @@ function scoreLabel(courseId: CourseId) {
         </RouterLink>
       </template>
     </div>
+
+    <p class="feedback">
+      <button class="btn" type="button" @click="openFeedback()">Send feedback</button>
+    </p>
   </section>
 </template>
 
@@ -94,6 +100,10 @@ function scoreLabel(courseId: CourseId) {
 
 .hub-card.soon em {
   color: #6b7280;
+}
+
+.feedback {
+  margin: 0.4rem 0 0;
 }
 
 @media (min-width: 700px) {

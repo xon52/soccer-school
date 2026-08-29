@@ -3,7 +3,7 @@ import type { Arrow, Keyframe, Lesson, Player, Point } from '@/types'
 import type { LessonBuilder, PointRef, StepBuilder } from '@/lesson/commands/types'
 import { teamFromTag } from '@/lesson/commands/types'
 import { LessonParseError } from '@/lesson/error'
-import { lineup7v7, MIN_PLAYER_GAP_M } from '@/lesson/lineup'
+import { lineup7v7, MIN_OVERLAP_M, MIN_PLAYER_GAP_M } from '@/lesson/lineup'
 import { parseTag } from '@/lesson/tag'
 
 function clonePlayers(players: Player[]) {
@@ -46,9 +46,10 @@ function warnSpacing(players: Player[], where: string) {
       const b = players[j]
       if (!a || !b) continue
       const gap = Math.hypot(a.x - b.x, a.y - b.y)
-      if (gap < MIN_PLAYER_GAP_M) {
+      const minGap = a.team === b.team ? MIN_PLAYER_GAP_M : MIN_OVERLAP_M
+      if (gap < minGap) {
         console.warn(
-          `[lesson] ${where}: ${a.id} and ${b.id} are ${gap.toFixed(1)}m apart (need ~${MIN_PLAYER_GAP_M}m)`,
+          `[lesson] ${where}: ${a.id} and ${b.id} are ${gap.toFixed(1)}m apart (need ~${minGap}m)`,
         )
       }
     }

@@ -7,12 +7,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This big box sits in front of the goal.
   draw penalty-area left
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this big box in front of the goal called?
   answer Penalty area
   wrong Goal area
   wrong Center circle

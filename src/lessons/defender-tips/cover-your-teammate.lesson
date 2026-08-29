@@ -1,0 +1,41 @@
+title Your partner goes to the ball
+intro Red has the ball near your half.
+flip vertical
+
+setup
+  lineup 7v7
+  player R-CM at 44, 24
+  player R-RF at 55, 16
+  player B-LB at 30, 20
+  player B-CB at 26, 40
+  ball with R-CM
+
+step
+  caption You are the defender in blue. Watch what happens.
+  label B-CB You
+
+step
+  caption Your fellow defender runs out to close Red down. Another Red player sprints into the space behind.
+  B-LB to 41, 23
+  R-RF to 34, 14
+  arrow from B-LB to R-CM
+  arrow from R-RF to 26, 18
+  duration 1100
+
+question
+  prompt What is the best move?
+  answer Drop in behind them to cover
+  wrong Run at the ball as well
+  wrong Stay exactly where you are
+  wrong Push up to the halfway line
+  correct Cover the space behind.
+  why One defender goes to the ball, the other backs them up. If your partner gets beaten, you are the next wall.
+
+question
+  prompt What if you both chase the ball?
+  answer Red can pass into the gap
+  wrong You win it twice as fast
+  wrong The ref stops play
+  wrong Red has to kick it out
+  correct Red can pass into the gap.
+  why Two players on one ball leaves a hole behind you. Take turns: one presses, one covers.

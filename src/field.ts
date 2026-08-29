@@ -111,6 +111,16 @@ export function namedDrawing(name: string, side?: string): Drawing {
         h: WIDTH_M + pad * 2,
       }
     }
+    case 'goal-mouth': {
+      const left = side !== 'right'
+      return {
+        kind: 'bar',
+        x: (left ? 0 : LENGTH_M) - bar / 2,
+        y: (WIDTH_M - GOAL_WIDTH_M) / 2,
+        w: bar,
+        h: GOAL_WIDTH_M,
+      }
+    }
     case 'halfway-line':
       return {
         kind: 'bar',

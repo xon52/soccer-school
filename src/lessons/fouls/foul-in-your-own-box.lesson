@@ -1,0 +1,40 @@
+title A grab in your own box
+intro Red is attacking your goal.
+flip vertical
+
+setup
+  lineup 7v7
+  player R-LF at 12, 30
+  player B-CB at 12, 38
+  ball with R-LF
+
+step
+  caption Red is inside your big box with the ball.
+  draw penalty-area left
+
+step
+  caption A Blue defender grabs their shirt and pulls them back.
+  B-CB to 12, 33
+  label B-CB Pull
+  arrow from B-CB to R-LF
+  banner Foul
+  draw penalty-area left
+  duration 1100
+
+question
+  prompt What does Red get?
+  answer A penalty kick
+  wrong A free kick
+  wrong A corner
+  wrong A throw-in
+  correct A penalty kick.
+  why Grabbing a shirt is a foul, and this one was inside your own box, so Red shoots from the spot.
+
+question
+  prompt Why is this worse than a foul in the middle?
+  answer It is in your own box
+  wrong Red was running fast
+  wrong It was near the sideline
+  wrong The ball was in the air
+  correct It happened in your own box.
+  why The same foul in the middle is only a free kick. Inside your own box it becomes a penalty kick.

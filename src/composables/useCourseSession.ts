@@ -9,6 +9,8 @@ export interface SessionItem {
   lessonId: string
   play: Play
   question: Question
+  /** Position of the question block in its .lesson file, so a report can name it. */
+  questionIndex: number
 }
 
 const items = ref<SessionItem[]>([])
@@ -37,10 +39,11 @@ function prepareLesson(lesson: Lesson, spokenLeads: Set<string>): SessionItem[] 
   const flipped =
     lesson.canFlipVertical && Math.random() >= 0.5 ? flipPlayVertical(lesson.play) : lesson.play
   const play = dropRepeatedLead(flipped, spokenLeads)
-  return lesson.questions.map(shuffleQuestion).map((question) => ({
+  return lesson.questions.map(shuffleQuestion).map((question, questionIndex) => ({
     lessonId: lesson.id,
     play,
     question,
+    questionIndex,
   }))
 }
 

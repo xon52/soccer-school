@@ -1,0 +1,40 @@
+title A trip in their box
+intro Blue is attacking, close to Red's goal.
+flip vertical
+
+setup
+  lineup 7v7
+  player B-LF at 92, 28
+  player R-CB at 92, 36
+  ball with B-LF
+
+step
+  caption Blue is inside Red's big box, going for a shot.
+  draw penalty-area right
+
+step
+  caption A Red player sticks out a leg and trips Blue over.
+  R-CB to 92, 31
+  label R-CB Trip
+  arrow from R-CB to B-LF
+  banner Foul
+  draw penalty-area right
+  duration 1100
+
+question
+  prompt What does Blue get?
+  answer A penalty kick
+  wrong A free kick
+  wrong A corner
+  wrong A throw-in
+  correct A penalty kick.
+  why A foul inside the box is a penalty kick — one Blue player against the goalie.
+
+question
+  prompt Where is it kicked from?
+  answer The penalty spot
+  wrong The corner
+  wrong The halfway line
+  wrong The center circle
+  correct The penalty spot.
+  why Every penalty kick is taken from the little spot in front of the goal.

@@ -1,0 +1,41 @@
+title Behind the last defender
+intro Blue is passing the ball up to a striker.
+flip vertical
+
+setup
+  lineup 7v7
+  player R-CB at 78, 40
+  player R-RB at 74, 20
+  player R-LB at 74, 56
+  player B-LF at 72, 30
+  player B-CM at 55, 34
+  ball with B-CM
+
+step
+  caption Watch where Blue is when the ball is played.
+  draw line 78, 0 to 78, 68
+
+step
+  caption Blue kicks it forward. Their striker is still behind the last Red defender.
+  ball to 70, 30
+  arrow from B-CM to ball
+  draw line 78, 0 to 78, 68
+  duration 1300
+
+question
+  prompt Is Blue offside?
+  answer No
+  wrong Yes
+  wrong Yes, they are too close to the goal
+  wrong Only if they shoot
+  correct Not offside.
+  why Blue is on their own side of the last Red defender when the ball is kicked, so they can take it and keep going.
+
+question
+  prompt What happens now?
+  answer Play on
+  wrong Red gets a free kick
+  wrong Blue gets a corner
+  wrong The game stops
+  correct Play on.
+  why Nothing is wrong, so nobody stops. If Blue scores from here, the goal counts.

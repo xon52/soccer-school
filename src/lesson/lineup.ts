@@ -45,3 +45,5 @@ export function lineup7v7(): Player[] {
 }
 
 export const MIN_PLAYER_GAP_M = 6
+/** Opposite-team contact can be closer; warn only when tokens overlap. */
+export const MIN_OVERLAP_M = 1.5
