@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
+import FeedbackDialog from '@/components/FeedbackDialog.vue'
 import { useSpeech } from '@/composables/useSpeech'
 
 const route = useRoute()
@@ -45,5 +46,6 @@ const { muted, toggleMute } = useSpeech()
         <component :is="Component" :key="route.fullPath" />
       </RouterView>
     </main>
+    <FeedbackDialog />
   </div>
 </template>

@@ -7,12 +7,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This smaller box sits right in front of the goal.
   draw goal-area left
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this small box right at the goal called?
   answer Goal area
   wrong Penalty area
   wrong Center circle

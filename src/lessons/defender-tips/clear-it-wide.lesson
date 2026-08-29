@@ -1,0 +1,42 @@
+title The ball at your own goal
+intro You have the ball in front of your own goal.
+flip vertical
+
+setup
+  lineup 7v7
+  player B-CB at 14, 34
+  player R-LF at 28, 34
+  player R-RF at 22, 48
+  ball with B-CB
+
+step
+  caption You are the defender in blue. Watch what happens.
+  label B-CB You
+  draw penalty-area left
+
+step
+  caption Red closes you down, right in front of your own goal.
+  R-LF to 17, 34
+  R-RF to 18, 46
+  arrow from R-LF to B-CB
+  arrow from R-RF to 16, 42
+  draw penalty-area left
+  duration 1000
+
+question
+  prompt What is the best move?
+  answer Kick it wide, toward the sideline
+  wrong Pass it across in front of your goal
+  wrong Dribble through the middle
+  wrong Stand on the ball and wait
+  correct Send it wide.
+  why A pass across your own goal is the riskiest ball in soccer. If Red cuts it out, they shoot straight away.
+
+question
+  prompt Nobody is free. Where should it go?
+  answer High and wide, away from the middle
+  wrong Back into the middle
+  wrong Straight into your goalie's hands
+  wrong Over your own goal line
+  correct High and wide.
+  why When you are stuck, get the ball away from your goal. Your team can chase it and win it back up the field.

@@ -3,7 +3,7 @@ intro Red has the ball in front of your goal.
 
 setup
   lineup 7v7
-  player R-LF at 31, 34
+  player R-LF at 31, 47
   ball with R-LF
 
 step
@@ -11,9 +11,9 @@ step
 
 step
   caption It’s in! Red scored a goal.
-  ball to -3.2, 34
+  ball to -1.2, 36
   arrow from R-LF to ball
-  draw goal-line left
+  draw goal-mouth left
   duration 1450
 
 question

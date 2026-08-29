@@ -28,10 +28,21 @@ export const courses: Course[] = [
   },
   {
     id: 'fouls',
-    title: 'Fouls',
-    blurb: 'Pushes, trips, and handballs. Coming soon.',
-    comingSoon: true,
-    lessons: [],
+    title: 'Fouls and penalties',
+    blurb: 'Pushes, trips, and handballs. Is it a foul, and what happens next?',
+    lessons: lessonsFor('fouls'),
+  },
+  {
+    id: 'offside',
+    title: 'Offside',
+    blurb: 'Where can you stand when your team passes the ball forward?',
+    lessons: lessonsFor('offside'),
+  },
+  {
+    id: 'defender-tips',
+    title: 'Defender tips',
+    blurb: 'You are at the back. Watch the play and pick the best move.',
+    lessons: lessonsFor('defender-tips'),
   },
 ]
 

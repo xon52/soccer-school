@@ -1,0 +1,38 @@
+title A push in the middle
+intro Blue has the ball near the halfway line.
+flip vertical
+
+setup
+  lineup 7v7
+  player B-CM at 50, 30
+  player R-CM at 62, 30
+  ball with B-CM
+
+step
+  caption Blue is dribbling up the middle.
+
+step
+  caption Red runs in and shoves Blue over.
+  R-CM to 53, 30
+  label R-CM Push
+  arrow from R-CM to B-CM
+  banner Foul
+  duration 1100
+
+question
+  prompt Is that allowed?
+  answer No
+  wrong Yes
+  wrong Only in the middle
+  wrong Only if you get the ball
+  correct That is a foul.
+  why You cannot push someone over to get the ball. Go for the ball, not the player.
+
+question
+  prompt What does Blue get?
+  answer A free kick
+  wrong A penalty kick
+  wrong A throw-in
+  wrong A corner
+  correct A free kick.
+  why The foul happened out in the middle, so Blue restarts with a free kick right there.

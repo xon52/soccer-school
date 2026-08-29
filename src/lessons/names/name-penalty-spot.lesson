@@ -7,12 +7,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This little spot sits inside the big box.
   draw penalty-spot left
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this little spot in the big box called?
   answer Penalty spot
   wrong Center circle
   wrong Goal area

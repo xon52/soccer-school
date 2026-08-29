@@ -18,6 +18,7 @@ function currentStep(builder: LessonBuilder, line: SourceLine) {
 const NAMED_DRAWS = new Set([
   'sideline',
   'goal-line',
+  'goal-mouth',
   'penalty-area',
   'goal-area',
   'halfway-line',

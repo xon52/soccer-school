@@ -14,7 +14,7 @@ Glob load: `src/lessons/**/*.lesson` via `src/lesson/load.ts`. A parse error cra
 
 **Path is identity:** `src/lessons/<course>/<name>.lesson`
 
-- Folder = course (`names`, `ball-out`, `goalie-hands`, `fouls`)
+- Folder = course (`names`, `ball-out`, `goalie-hands`, `fouls`, `offside`, `defender-tips`)
 - File name (no `.lesson`) = lesson id, e.g. `throw-in-to-goalie.lesson`
 
 Do not put `course` or `id` in the file.
@@ -82,7 +82,8 @@ New course: add the slug to `COURSE_IDS` in `src/types.ts`, a folder `src/lesson
 
 - Metres. Pitch is **105 × 68**. Origin: left = your goal (`x = 0`), top sideline (`y = 0`).
 - Off-field is allowed (`y > 68`, `x < 0`).
-- Keep ~**8 m** between marking players so the ball fits; parser warns under **6 m**.
+- Keep ~**8 m** between teammates and between players who are only marking, so the ball fits. Parser warns under **6 m** for same-team pairs.
+- Contact (shove, trip, tackle, close-down) should look like contact: opposite-team players ~**2–3 m** apart. Parser only warns those pairs when tokens overlap (~1.5 m).
 - Default move ~800 ms; kicks/passes use `duration 1100`–`1450`.
 
 ## Tags
@@ -116,8 +117,8 @@ The first step's caption is the lead-in. If several lessons in a course share a 
 | `caption <text>` | Spoken while the step animates; keep it kid-simple |
 | `TAG to x, y` | Move a player |
 | `ball to x, y` / `ball with TAG` | Independent ball vs possession |
-| `arrow from <TAG\|ball\|x, y> to <TAG\|ball\|x, y>` | Teaching/kick arrow |
-| `draw …` | Yellow overlay (below) |
+| `arrow from <TAG\|ball\|x, y> to <TAG\|ball\|x, y>` | Teaching/kick arrow. One arrow per mover — if three players run, draw three arrows. Resolve after the step's moves, so `arrow from TAG to x, y` continues from the new spot; use `arrow from x, y to TAG` to show the path they just took. |
+| `draw …` | Yellow overlay (below). Glow the line or box when it **is** the subject (names, offside line, "inside the box"). Do not glow the answer on a judgment question (a highlighted halfway line while asking how far to push up). |
 | `label TAG text` | One character stays on the token; longer text floats above the player and fades |
 | `banner text` | Center overlay ("Throw-in") |
 | `duration ms` | Move animation only |
@@ -131,6 +132,7 @@ Named (prefer these):
 ```
 draw sideline top|bottom
 draw goal-line left|right
+draw goal-mouth left|right      # just the bit between the posts
 draw penalty-area left|right
 draw goal-area left|right
 draw halfway-line
@@ -144,6 +146,12 @@ Generic: `draw line x1, y1 to x2, y2` · `draw rect x, y, w, h` · `draw circle 
 
 Exactly: `prompt`, one `answer`, three `wrong`, `correct`, `why`. Choices are shuffled at runtime.
 
+**`prompt` — spoken after the clip, and the only question text on screen.** Do not describe the moment in a caption and then ask about "that" — the kid hears the same thing twice and a muted player reads none of it. Put the description in the prompt and let the step just draw:
+
+- Still shots (a glowing line or box) carry no narration, so the prompt says what is glowing: `prompt What is this big box in front of the goal called?` — not a caption plus `prompt What is that called?`.
+- Action plays are the opposite. The caption narrates the movement the kid is watching, and the prompt asks the beat (`Who gets the ball?`). Do not fold that caption in; it makes the prompt long and the clip silent.
+- The same prompt across several lessons in a course is fine and often right — `Who gets the ball?` asked of seven situations is what teaches reading the field. Reports identify a question by lesson file and block position, not prompt text, so repetition costs nothing.
+
 **`correct` — shown on screen on a hit.** The voice only says a short random opener ("That's right." / "You got it." / "Nice one."), so this line is read, not heard, and the answer is never restated out loud. Rules:
 
 - Short and sharp. One clause, no teaching, no "because".
@@ -153,6 +161,8 @@ Exactly: `prompt`, one `answer`, three `wrong`, `correct`, `why`. Choices are sh
 **`why` — spoken on a miss only.** This is where the teaching goes: one sentence saying what actually happens and why.
 
 **Two beats on one moment = two `question` blocks in the same file**, back to back with no `step` between them (see `ball-out/throw-in-blue-out.lesson`: who gets the ball, then what restart). The clip does not replay between them; the second prompt is just asked over the same frozen frame. Only split into separate files when the second beat needs its own animation.
+
+**Advice plays** (defender tips and similar): show the problem first. **Prefer** a last step that plays out the good move when the clip can show it (`push-up-with-the-team.lesson` is the template). Questions can then test *why* or *how far* instead of "what is the best move?" — but asking the best move is fine when the clip stops on the problem. There is still no step after a `question`; any payoff has to live in the clip.
 
 ## Audience
 

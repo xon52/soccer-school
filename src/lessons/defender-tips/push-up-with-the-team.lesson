@@ -1,0 +1,48 @@
+title Your team goes forward
+intro Blue wins the ball and attacks.
+flip vertical
+
+setup
+  lineup 7v7
+  player B-CM at 60, 34
+  player R-CM at 68, 44
+  ball with B-CM
+
+step
+  caption You are the defender in blue. Watch what happens.
+  label B-CB You
+
+step
+  caption Blue's attack races off toward Red's goal, and you are left far behind.
+  B-CM to 74, 34
+  B-LF to 84, 24
+  B-RF to 84, 46
+  ball with B-CM
+  arrow from B-CM to 90, 34
+  arrow from B-LF to 96, 22
+  arrow from B-RF to 96, 48
+  duration 1200
+
+step
+  caption If you push up with them, the team stays close and Red has less space.
+  B-CB to 50, 34
+  arrow from 22, 34 to B-CB
+  duration 1100
+
+question
+  prompt Why move up with the team?
+  answer So everyone stays close together
+  wrong So you can score the goal
+  wrong Defenders must stay by the goalie
+  wrong Red has to kick it out
+  correct The team stays together.
+  why Moving up keeps a small gap in front of you. Stay back and Red gets a huge empty field if they win the ball.
+
+question
+  prompt How far should you go?
+  answer Up near the middle of the field
+  wrong All the way into Red's box
+  wrong Stay next to your goalie
+  wrong Off the field
+  correct Up near the middle.
+  why If you keep running into their box, nobody is left at the back. Push up, but stay behind your midfielders.

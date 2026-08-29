@@ -7,12 +7,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This line runs across the end of the field, by the goal.
   draw goal-line left
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this line across the end of the field called?
   answer Goal line
   wrong Sideline
   wrong Halfway line

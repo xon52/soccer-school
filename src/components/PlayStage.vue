@@ -15,6 +15,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   answered: [correct: boolean]
   continue: []
+  flag: []
 }>()
 
 type Phase = 'asking' | 'done'
@@ -147,6 +148,24 @@ const fallbackLabel = computed(() => {
         <div class="play-controls">
           <button v-if="isPlaying" class="replay-btn" type="button" @click="skip">Skip</button>
           <button class="replay-btn" type="button" @click="watchPlay">Replay</button>
+          <button
+            class="replay-btn flag-btn"
+            type="button"
+            title="Report a problem"
+            aria-label="Report a problem with this question"
+            @click="emit('flag')"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M6 2.6c.7 0 1.2.6 1.2 1.2v17.1a1.2 1.2 0 0 1-2.4 0V3.8c0-.6.5-1.2 1.2-1.2z"
+              />
+              <path
+                fill="currentColor"
+                d="M8.5 4.3h9.3a1 1 0 0 1 .87 1.5L17 8.7l1.67 2.9a1 1 0 0 1-.87 1.5H8.5z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -241,6 +260,18 @@ const fallbackLabel = computed(() => {
   background: #e8f6ec;
   color: #14221b;
   cursor: pointer;
+}
+
+.flag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.5rem;
+}
+
+.flag-btn svg {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .choices {

@@ -7,12 +7,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This line cuts the field in half.
   draw halfway-line
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this line across the middle called?
   answer Halfway line
   wrong Goal line
   wrong Sideline

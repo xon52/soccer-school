@@ -17,7 +17,7 @@ Cursor agents: follow `.cursor/skills/soccer-school-lessons/SKILL.md`.
 1. Copy a similar file in the matching course folder.
 2. Name the file after the lesson (`throw-in-to-goalie.lesson`). Set `title` and `intro`.
 3. Each `question` needs a prompt, one answer, three wrongs, a `correct` line (short praise, spoken on a hit), and a `why` (the teaching, spoken on a miss). Ask two questions about the same moment by putting two `question` blocks back to back.
-4. Course folders: `names`, `ball-out`, `goalie-hands`, or `fouls`.
+4. Course folders: `names`, `ball-out`, `goalie-hands`, `fouls`, `offside`, or `defender-tips`.
 
 Files are loaded automatically. A syntax error prevents the app from starting. Do not write `course` or `id` in the file.
 

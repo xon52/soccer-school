@@ -8,7 +8,14 @@ export type Highlight =
   | 'centerCircle'
   | 'halfwayLine'
   | 'penaltySpot'
-export const COURSE_IDS = ['names', 'ball-out', 'goalie-hands', 'fouls'] as const
+export const COURSE_IDS = [
+  'names',
+  'ball-out',
+  'goalie-hands',
+  'fouls',
+  'offside',
+  'defender-tips',
+] as const
 export type CourseId = (typeof COURSE_IDS)[number]
 
 export interface Point {

@@ -1,0 +1,42 @@
+title Straight from a throw-in
+intro Blue is taking a throw-in near Red's goal.
+flip vertical
+
+setup
+  lineup 7v7
+  player B-RB at 70, 67
+  player R-CB at 76, 40
+  player R-LB at 74, 22
+  player B-LF at 88, 52
+  ball with B-RB
+
+step
+  caption Watch where Blue is when the ball is played.
+  label B-RB Throw
+  draw sideline bottom
+  draw line 76, 0 to 76, 68
+
+step
+  caption Blue throws it to a teammate who is past the last Red defender.
+  ball to 86, 52
+  arrow from B-RB to ball
+  draw line 76, 0 to 76, 68
+  duration 1300
+
+question
+  prompt Is Blue offside?
+  answer No
+  wrong Yes
+  wrong Yes, they are past the defender
+  wrong Only if they score
+  correct Not offside.
+  why There is no offside from a throw-in. You can stand anywhere and take the ball.
+
+question
+  prompt What if a teammate had kicked it instead?
+  answer Then it would be offside
+  wrong Still fine
+  wrong It would be a corner
+  wrong Red would get a penalty
+  correct Then it would be offside.
+  why A kicked pass counts for offside. A throw-in does not, so a throw is a good way to feed a striker who is standing deep.

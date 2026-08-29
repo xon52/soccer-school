@@ -1,0 +1,41 @@
+title One on one
+intro A Red player is dribbling toward you.
+flip vertical
+
+setup
+  lineup 7v7
+  player R-LF at 44, 40
+  player B-CB at 30, 40
+  player B-CM at 48, 50
+  ball with R-LF
+
+step
+  caption You are the defender in blue. Watch what happens.
+  label B-CB You
+
+step
+  caption Red dribbles straight at you, and a Blue teammate sprints back to help.
+  R-LF to 33, 40
+  B-CM to 40, 46
+  ball with R-LF
+  arrow from R-LF to B-CB
+  arrow from B-CM to 36, 42
+  duration 1100
+
+question
+  prompt What is the best move?
+  answer Stay on your feet and slow them down
+  wrong Slide in to win the ball
+  wrong Back off to your goal line
+  wrong Turn and run to your goalie
+  correct Stay on your feet.
+  why A slide is one chance only. Miss it and Red is past you while you are on the ground. Standing up gives your teammate time to arrive.
+
+question
+  prompt When is a slide a good idea?
+  answer When it is your last chance to stop a shot
+  wrong Every time Red comes near
+  wrong When you are tired
+  wrong When the ball is far away
+  correct Only as a last chance.
+  why Slides are for emergencies, like blocking a shot. The rest of the time, feet on the ground win more balls.

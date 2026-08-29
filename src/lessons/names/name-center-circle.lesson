@@ -7,12 +7,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This circle sits right in the middle of the field.
   draw center-circle
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this circle in the middle called?
   answer Center circle
   wrong Penalty area
   wrong Goal area

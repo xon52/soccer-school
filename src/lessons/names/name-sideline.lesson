@@ -8,12 +8,11 @@ step
   caption Look at the field. One part will glow yellow.
 
 step
-  caption This long line runs all the way down the side.
   draw sideline bottom
   duration 400
 
 question
-  prompt What is that called?
+  prompt What is this long line down the side called?
   answer Sideline
   wrong Goal line
   wrong Halfway line
