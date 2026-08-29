@@ -11,7 +11,7 @@ setup
   ball with B-RB
 
 step
-  caption Watch where Blue is when the ball is played.
+  caption Watch where Blue is when the ball is played. The yellow line marks the last defender.
   label B-RB Throw
   draw sideline bottom
   draw line 76, 0 to 76, 68
@@ -24,7 +24,7 @@ step
   duration 1300
 
 question
-  prompt Is Blue offside?
+  prompt Is the Blue striker offside?
   answer No
   wrong Yes
   wrong Yes, they are past the defender
@@ -39,4 +39,4 @@ question
   wrong It would be a corner
   wrong Red would get a penalty
   correct Then it would be offside.
-  why A kicked pass counts for offside. A throw-in does not, so a throw is a good way to feed a striker who is standing deep.
+  why A kicked pass counts for offside. A throw-in does not, so a throw is a good way to reach a teammate far up the field.

@@ -15,15 +15,22 @@ step
   label B-CB You
 
 step
-  caption Your fellow defender runs out to close Red down. Another Red player sprints into the space behind.
+  caption Your teammate runs out to close Red down. Another Red player sprints into the space behind.
   B-LB to 41, 23
   R-RF to 34, 14
   arrow from B-LB to R-CM
   arrow from R-RF to 26, 18
   duration 1100
 
+step
+  caption Drop in behind your partner — you are the backup.
+  B-CB to 32, 28
+  arrow from 26, 40 to B-CB
+  arrow from R-RF to 28, 20
+  duration 1100
+
 question
-  prompt What is the best move?
+  prompt Your partner runs out to the ball and Red sends a runner behind them. What do you do?
   answer Drop in behind them to cover
   wrong Run at the ball as well
   wrong Stay exactly where you are
@@ -35,7 +42,7 @@ question
   prompt What if you both chase the ball?
   answer Red can pass into the gap
   wrong You win it twice as fast
-  wrong The ref stops play
+  wrong You both get to the ball first
   wrong Red has to kick it out
   correct Red can pass into the gap.
   why Two players on one ball leaves a hole behind you. Take turns: one presses, one covers.

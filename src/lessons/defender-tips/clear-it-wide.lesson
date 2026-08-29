@@ -23,8 +23,15 @@ step
   draw penalty-area left
   duration 1000
 
+step
+  caption Boot it high and wide — away from the middle.
+  ball to 6, 58
+  arrow from B-CB to ball
+  draw penalty-area left
+  duration 1100
+
 question
-  prompt What is the best move?
+  prompt Red is closing you down near your own goal. Where do you kick it?
   answer Kick it wide, toward the sideline
   wrong Pass it across in front of your goal
   wrong Dribble through the middle
@@ -36,7 +43,7 @@ question
   prompt Nobody is free. Where should it go?
   answer High and wide, away from the middle
   wrong Back into the middle
-  wrong Straight into your goalie's hands
+  wrong A soft pass back to your goalie
   wrong Over your own goal line
   correct High and wide.
-  why When you are stuck, get the ball away from your goal. Your team can chase it and win it back up the field.
+  why When you are stuck, get the ball away from your goal. Red is in the way, so a short pass back is risky too.

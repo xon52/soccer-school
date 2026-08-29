@@ -15,11 +15,20 @@ step
 step
   caption A Blue defender grabs their shirt and pulls them back.
   B-CB to 12, 33
-  label B-CB Pull
+  label B-CB Grab
   arrow from B-CB to R-LF
   banner Foul
   draw penalty-area left
   duration 1100
+
+question
+  prompt Is that allowed?
+  answer No
+  wrong Yes
+  wrong Yes, if you get there first
+  wrong Only outside the box
+  correct That is a foul.
+  why You cannot grab someone's shirt to stop them. Play the ball, not the player.
 
 question
   prompt What does Red get?
@@ -33,8 +42,8 @@ question
 question
   prompt Why is this worse than a foul in the middle?
   answer It is in your own box
-  wrong Red was running fast
-  wrong It was near the sideline
-  wrong The ball was in the air
+  wrong Because Blue grabbed the shirt
+  wrong Because it was near the goal
+  wrong Because Red had the ball
   correct It happened in your own box.
   why The same foul in the middle is only a free kick. Inside your own box it becomes a penalty kick.

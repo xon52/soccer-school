@@ -15,11 +15,22 @@ step
 step
   caption A Red player sticks out a leg and trips Blue over.
   R-CB to 92, 31
+  B-LF to 89, 33
   label R-CB Trip
   arrow from R-CB to B-LF
   banner Foul
   draw penalty-area right
+  draw penalty-spot right
   duration 1100
+
+question
+  prompt Is that allowed?
+  answer No
+  wrong Yes
+  wrong Yes, if you reach the ball first
+  wrong Only outside the box
+  correct That is a foul.
+  why You cannot stick out a leg and trip someone. Go for the ball, not the player.
 
 question
   prompt What does Blue get?

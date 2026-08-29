@@ -30,7 +30,7 @@ step
   duration 1100
 
 question
-  prompt Why move up with the team?
+  prompt Your team races forward and leaves you behind. Why should you move up too?
   answer So everyone stays close together
   wrong So you can score the goal
   wrong Defenders must stay by the goalie
@@ -42,7 +42,7 @@ question
   prompt How far should you go?
   answer Up near the middle of the field
   wrong All the way into Red's box
-  wrong Stay next to your goalie
+  wrong Stay back in your penalty box
   wrong Off the field
   correct Up near the middle.
   why If you keep running into their box, nobody is left at the back. Push up, but stay behind your midfielders.
