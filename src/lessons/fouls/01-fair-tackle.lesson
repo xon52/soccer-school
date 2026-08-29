@@ -5,16 +5,17 @@ flip vertical
 setup
   lineup 7v7
   player B-CM at 48, 34
-  player R-CM at 58, 34
+  player R-CM at 52, 34
   ball with B-CM
 
 step
   caption Blue is running forward with the ball.
 
 step
-  caption Red runs beside Blue, shoulder to shoulder, and pokes the ball away.
-  R-CM to 51, 34
+  caption Red runs beside Blue, side by side, and pokes the ball away.
+  R-CM to 50, 34
   ball with R-CM
+  label R-CM Ball
   arrow from R-CM to ball
   duration 1100
 
@@ -25,7 +26,7 @@ question
   wrong Yes, it was a push
   wrong Only in the box
   correct No foul.
-  why Red went for the ball, not the player. Running shoulder to shoulder is allowed.
+  why Red went for the ball, not the player. Running side by side is allowed.
 
 question
   prompt What happens now?

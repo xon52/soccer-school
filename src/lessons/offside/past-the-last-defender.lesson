@@ -12,7 +12,7 @@ setup
   ball with B-CM
 
 step
-  caption Watch where Blue is when the ball is played.
+  caption Watch where Blue is when the ball is played. The yellow line marks the last defender.
   draw line 78, 0 to 78, 68
 
 step
@@ -23,13 +23,13 @@ step
   duration 1300
 
 question
-  prompt Is Blue offside?
+  prompt Is the Blue striker offside?
   answer Yes
   wrong No
   wrong Only if they score
   wrong Only in the box
   correct Offside.
-  why When the ball was kicked, Blue was closer to Red's goal than the last defender. You need two Red players, usually the goalie and one defender, between you and their goal.
+  why When the ball was kicked, the Blue striker was closer to Red's goal than the last defender. You need two Red players, usually the goalie and one defender, between you and their goal.
 
 question
   prompt What happens now?

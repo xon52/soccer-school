@@ -22,8 +22,17 @@ step
   arrow from B-CM to 36, 42
   duration 1100
 
+step
+  caption Stay on your feet and jockey back — your teammate arrives to help.
+  R-LF to 31, 40
+  B-CB to 28, 40
+  B-CM to 34, 42
+  ball with R-LF
+  arrow from B-CM to R-LF
+  duration 1100
+
 question
-  prompt What is the best move?
+  prompt Red is dribbling at you and a teammate is coming to help. What should you do?
   answer Stay on your feet and slow them down
   wrong Slide in to win the ball
   wrong Back off to your goal line
@@ -32,10 +41,10 @@ question
   why A slide is one chance only. Miss it and Red is past you while you are on the ground. Standing up gives your teammate time to arrive.
 
 question
-  prompt When is a slide a good idea?
-  answer When it is your last chance to stop a shot
-  wrong Every time Red comes near
-  wrong When you are tired
-  wrong When the ball is far away
-  correct Only as a last chance.
+  prompt Red breaks past you toward goal — is it time to slide?
+  answer Yes, to block the shot
+  wrong No, keep jogging beside them
+  wrong No, only when you are tired
+  wrong No, never slide
+  correct Yes, to block the shot.
   why Slides are for emergencies, like blocking a shot. The rest of the time, feet on the ground win more balls.
