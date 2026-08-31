@@ -22,6 +22,7 @@ type Phase = 'asking' | 'done'
 
 const phase = ref<Phase>('asking')
 const chosen = ref<number | null>(null)
+const fallbackOpen = ref(false)
 let introGen = 0
 let feedbackGen = 0
 
@@ -55,6 +56,7 @@ watch(
     feedbackGen += 1
     chosen.value = null
     phase.value = 'asking'
+    fallbackOpen.value = false
     skipToEnd()
     speak(question.prompt)
   },
@@ -89,6 +91,7 @@ async function choose(choiceIndex: number) {
   introGen += 1
   skipToEnd()
   chosen.value = choiceIndex
+  fallbackOpen.value = false
   const correct = choiceIndex === props.question.correctIndex
   emit('answered', correct)
   phase.value = 'done'
@@ -169,26 +172,37 @@ const fallbackLabel = computed(() => {
         </div>
       </div>
 
-      <div class="choices">
-        <QuizChoice
-          v-for="(choice, index) in question.choices"
-          :key="choice"
-          :label="choice"
-          :revealed="chosen !== null"
-          :selected="chosen === index"
-          :correct="index === question.correctIndex"
-          @choose="choose(index)"
-        />
+      <div class="choices-panel">
+        <div class="choices">
+          <QuizChoice
+            v-for="(choice, index) in question.choices"
+            :key="choice"
+            :label="choice"
+            :revealed="chosen !== null"
+            :selected="chosen === index"
+            :correct="index === question.correctIndex"
+            @choose="choose(index)"
+          />
+        </div>
+        <div
+          v-if="fallbackOpen"
+          class="why-overlay"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="fallbackLabel"
+        >
+          <p>{{ fallbackText }}</p>
+          <button class="replay-btn" type="button" @click="fallbackOpen = false">Close</button>
+        </div>
       </div>
 
       <div class="actions">
         <slot />
       </div>
 
-      <details class="fallback">
-        <summary>{{ fallbackLabel }}</summary>
-        <p>{{ fallbackText }}</p>
-      </details>
+      <button class="fallback-btn" type="button" @click="fallbackOpen = !fallbackOpen">
+        {{ fallbackLabel }}
+      </button>
     </section>
   </div>
 </template>
@@ -238,6 +252,7 @@ const fallbackLabel = computed(() => {
 
 .prompt {
   margin: 0;
+  min-height: 2.5em;
   font-size: clamp(1.05rem, 2.4vw, 1.35rem);
   font-weight: 800;
   line-height: 1.25;
@@ -274,37 +289,58 @@ const fallbackLabel = computed(() => {
   height: 0.95rem;
 }
 
+.choices-panel {
+  position: relative;
+}
+
 .choices {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
   gap: 0.55rem;
   width: 100%;
+}
+
+.why-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  overflow: auto;
+  background: #fff8e7;
+  border: 3px solid #14221b;
+  border-radius: 14px;
+}
+
+.why-overlay p {
+  margin: 0;
+  flex: 1;
+  line-height: 1.4;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.7rem;
+  min-height: 3.4rem;
 }
 
-.actions:not(:has(*)) {
-  display: none;
-}
-
-.fallback {
+.fallback-btn {
   margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
   font-size: 0.95rem;
-}
-
-.fallback summary {
-  cursor: pointer;
   font-weight: 800;
   color: #1d6a3a;
-}
-
-.fallback p {
-  margin: 0.45rem 0 0;
-  line-height: 1.4;
+  cursor: pointer;
+  text-align: left;
 }
 
 @media (min-width: 800px) {
@@ -319,7 +355,7 @@ const fallbackLabel = computed(() => {
     gap: 0.5rem;
   }
 
-  .fallback {
+  .fallback-btn {
     font-size: 0.85rem;
   }
 }

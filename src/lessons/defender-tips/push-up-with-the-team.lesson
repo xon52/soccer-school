@@ -24,19 +24,19 @@ step
   duration 1200
 
 step
-  caption If you push up with them, the team stays close and Red has less space.
+  caption If you push up too, you can help in midfield, and Red has less empty space behind.
   B-CB to 50, 34
   arrow from 22, 34 to B-CB
   duration 1100
 
 question
-  prompt Your team races forward and leaves you behind. Why should you move up too?
-  answer So everyone stays close together
+  prompt Why move up with the team?
+  answer So you are not left too far behind
   wrong So you can score the goal
   wrong Defenders must stay by the goalie
   wrong Red has to kick it out
-  correct The team stays together.
-  why Moving up keeps a small gap in front of you. Stay back and Red gets a huge empty field if they win the ball.
+  correct Do not get stranded.
+  why Stay back and Red can win the ball into a huge empty field. Push up in your own half so you can help.
 
 question
   prompt How far should you go?
