@@ -18,8 +18,8 @@ step
   R-LF to 32, 28
   B-CB to 33, 32
   ball with R-LF
-  arrow from R-LF to 12, 30
-  arrow from B-CB to 18, 34
+  arrow from 48, 28 to R-LF
+  arrow from 46, 38 to B-CB
   duration 1100
 
 question

@@ -124,13 +124,19 @@ const overlayIds = computed(() => {
 const fieldPlayers = computed(() => props.players.filter((player) => !overlayIds.value.has(player.id)))
 const overlayPlayers = computed(() => props.players.filter((player) => overlayIds.value.has(player.id)))
 
+function isYou(player: Player) {
+  return player.label === 'You'
+}
+
 function markLabel(player: Player) {
   return player.label && player.label.length === 1 ? player.label : undefined
 }
 
 function actionLabel(player: Player) {
-  return player.label && player.label.length > 1 ? player.label : undefined
+  return player.label && player.label.length > 1 && player.label !== 'You' ? player.label : undefined
 }
+
+const hasYou = computed(() => props.players.some(isYou))
 
 function pillWidth(text: string) {
   return Math.max(52, text.length * 9.5 + 22)
@@ -357,6 +363,11 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
         :style="playerStyle(player)"
       >
         <circle
+          v-if="isYou(player)"
+          class="you-ring"
+          r="26"
+        />
+        <circle
           v-if="player.hasBall && player.role !== 'goalkeeper'"
           class="possession-ring"
           r="20"
@@ -426,6 +437,11 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
         :style="playerStyle(player)"
       >
         <circle
+          v-if="isYou(player)"
+          class="you-ring"
+          r="26"
+        />
+        <circle
           v-if="player.hasBall && player.role !== 'goalkeeper'"
           class="possession-ring"
           r="20"
@@ -492,6 +508,7 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
     <div v-if="showLegend" class="legend" aria-hidden="true">
       <span class="legend-item"><i class="swatch blue" /> You (blue)</span>
       <span class="legend-item"><i class="swatch red" /> Other team (red)</span>
+      <span v-if="hasYou" class="legend-item"><i class="swatch you" /> White ring = you</span>
       <span class="legend-item"><i class="swatch ball" /> Yellow ring = has the ball</span>
     </div>
   </div>
@@ -564,6 +581,12 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
   stroke-width: 5;
 }
 
+.you-ring {
+  fill: none;
+  stroke: #f8fafc;
+  stroke-width: 5;
+}
+
 .kick-arrow {
   fill: none;
   stroke-width: 7;
@@ -590,14 +613,14 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
   transition-timing-function: cubic-bezier(0.2, 0.85, 0.25, 1);
 }
 
-.player.blue > circle:not(.possession-ring),
+.player.blue > circle:not(.possession-ring):not(.you-ring),
 .player.blue > rect:not(.possession-ring) {
   fill: #2563eb;
   stroke: #0f172a;
   stroke-width: 2.5;
 }
 
-.player.red > circle:not(.possession-ring),
+.player.red > circle:not(.possession-ring):not(.you-ring),
 .player.red > rect:not(.possession-ring) {
   fill: #dc2626;
   stroke: #0f172a;
@@ -700,6 +723,11 @@ const drawn = computed(() => props.drawings.map((drawing, index) => ({
 .swatch.ball {
   background: transparent;
   border-color: #facc15;
+}
+
+.swatch.you {
+  background: transparent;
+  border-color: #f8fafc;
 }
 
 @media (max-height: 620px) {

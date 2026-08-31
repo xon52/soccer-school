@@ -56,12 +56,17 @@ function warnSpacing(players: Player[], where: string) {
   }
 }
 
+function arrowTeam(from: PointRef, to: PointRef) {
+  if (from.type === 'tag') return teamFromTag(from.tag)
+  if (to.type === 'tag') return teamFromTag(to.tag)
+  return undefined
+}
+
 function snapshot(step: StepBuilder, players: Player[], ball: Point): Keyframe {
   const arrows: Arrow[] = step.arrows.map((arrow) => {
     const from = resolveRef(arrow.from, players, ball)
     const to = resolveRef(arrow.to, players, ball)
-    const team = arrow.from.type === 'tag' ? teamFromTag(arrow.from.tag) : undefined
-    return { from, to, team }
+    return { from, to, team: arrowTeam(arrow.from, arrow.to) }
   })
 
   return {

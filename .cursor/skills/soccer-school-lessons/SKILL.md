@@ -117,13 +117,13 @@ The first step's caption is the lead-in. If several lessons in a course share a 
 | `caption <text>` | Spoken while the step animates; keep it kid-simple |
 | `TAG to x, y` | Move a player |
 | `ball to x, y` / `ball with TAG` | Independent ball vs possession |
-| `arrow from <TAG\|ball\|x, y> to <TAG\|ball\|x, y>` | Teaching/kick arrow. One arrow per mover — if three players run, draw three arrows. Resolve after the step's moves, so `arrow from TAG to x, y` continues from the new spot; use `arrow from x, y to TAG` to show the path they just took. |
+| `arrow from <TAG\|ball\|x, y> to <TAG\|ball\|x, y>` | Teaching/kick arrow. One arrow per mover — if three players run, draw three arrows. Resolve after the step's moves, so `arrow from TAG to x, y` continues from the new spot; use `arrow from x, y to TAG` to show the path they just took. Color follows the tagged end (blue or red); both-ends-numeric stays yellow. |
 | `draw …` | Yellow overlay (below). Glow the line or box when it **is** the subject (names, offside line, "inside the box"). Do not glow the answer on a judgment question (a highlighted halfway line while asking how far to push up). |
-| `label TAG text` | One character stays on the token; longer text floats above the player and fades |
+| `label TAG text` | One character stays on the token; longer text floats above the player and fades. `label TAG You` is special: a persistent **white ring** (not a fading pill), so the kid can still see who they are after the caption. |
 | `banner text` | Center overlay ("Throw-in") |
 | `duration ms` | Move animation only |
-| `hands TAG` | Goalie gloves |
-| `no-hands TAG` | Slash on **that** player this step |
+| `hands TAG` | Gloves on that player. Use for a legal catch, or to show an outfielder using their hands **without** giving away that it is illegal. |
+| `no-hands TAG` | Slash on **that** player this step. Do not put this (or a `banner Handball`) on screen before asking whether the play is allowed. |
 
 ## Draw
 
@@ -162,7 +162,7 @@ Exactly: `prompt`, one `answer`, three `wrong`, `correct`, `why`. Choices are sh
 
 **Two beats on one moment = two `question` blocks in the same file**, back to back with no `step` between them (see `ball-out/throw-in-blue-out.lesson`: who gets the ball, then what restart). The clip does not replay between them; the second prompt is just asked over the same frozen frame. Only split into separate files when the second beat needs its own animation.
 
-**Advice plays** (defender tips and similar): show the problem first. **Prefer** a last step that plays out the good move when the clip can show it (`push-up-with-the-team.lesson` is the template). Questions can then test *why* or *how far* instead of "what is the best move?" — but asking the best move is fine when the clip stops on the problem. There is still no step after a `question`; any payoff has to live in the clip.
+**Advice plays** (defender tips and similar): show the problem first. **Prefer** a last step that plays out the good move when the clip can show it (`push-up-with-the-team.lesson` is the template). Questions can then test *why* or *how far* instead of "what is the best move?" — but asking the best move is fine when the clip stops on the problem. Do not draw arrows of the correct next run while still asking what to do. There is still no step after a `question`; any payoff has to live in the clip.
 
 ## Audience
 

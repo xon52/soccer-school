@@ -8,8 +8,11 @@ setup
   player R-RB at 36, 18
   player R-LB at 36, 52
   player R-CM at 26, 40
+  player R-RF at 28, 10
+  player R-LF at 28, 60
   player B-CM at 18, 26
-  player B-LF at 46, 30
+  player B-LF at 50, 30
+  player B-RF at 28, 50
   ball with B-CM
 
 step
@@ -18,7 +21,7 @@ step
 
 step
   caption Blue kicks it forward. Their teammate is past every Red outfield player.
-  ball to 44, 30
+  ball to 48, 30
   arrow from B-CM to ball
   draw halfway-line
   duration 1300

@@ -18,7 +18,6 @@ step
   label R-CB Trip
   arrow from R-CB to B-LF
   banner Foul
-  draw penalty-area right
   duration 1100
 
 question

@@ -15,10 +15,9 @@ step
 step
   caption Blue sticks an arm out and stops it.
   ball to 31, 30
-  no-hands B-CB
+  hands B-CB
   label B-CB Arm
   arrow from R-CM to ball
-  banner Handball
   duration 1200
 
 question

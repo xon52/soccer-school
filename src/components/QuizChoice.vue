@@ -31,6 +31,7 @@ defineEmits<{
 <style scoped>
 .choice {
   width: 100%;
+  height: 100%;
   min-height: 3.4rem;
   text-align: center;
   font: inherit;
