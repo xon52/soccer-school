@@ -12,10 +12,11 @@ step
   caption Blue is running forward with the ball.
 
 step
-  caption Red runs beside Blue, shoulder to shoulder, and pokes the ball away.
+  caption Red runs beside Blue, side by side, and pokes the ball away.
   B-CM to 54, 32.5
   R-CM to 55, 35
   ball with R-CM
+  label R-CM Ball
   arrow from 46, 32.5 to B-CM
   arrow from 47, 35 to R-CM
   duration 1100
@@ -27,7 +28,7 @@ question
   wrong Yes, it was a push
   wrong Only in the box
   correct No foul.
-  why Red went for the ball, not the player. Running shoulder to shoulder is allowed.
+  why Red went for the ball, not the player. Running side by side is allowed.
 
 question
   prompt What happens now?

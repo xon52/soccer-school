@@ -22,20 +22,29 @@ step
   arrow from 46, 38 to B-CB
   duration 1100
 
+step
+  caption Cut in front — get between Red and your goal.
+  R-LF to 28, 28
+  B-CB to 24, 29
+  ball with R-LF
+  arrow from R-LF to 12, 30
+  arrow from B-CB to 18, 30
+  duration 1100
+
 question
-  prompt What is the best move?
+  prompt Red is running at your goal and you are beside them. What should you do?
   answer Get between them and your goal
   wrong Chase them from behind
   wrong Keep running beside them
-  wrong Wait near the sideline
+  wrong Sprint back to your goalie
   correct Get goal-side.
   why The quickest way to your goal is a straight line. Get onto that line first and Red has to go around you.
 
 question
-  prompt Why is that better?
+  prompt Why get between Red and your goal instead of running beside them?
   answer Red has to go around you
   wrong Red must pass backwards
-  wrong The ref will stop Red
-  wrong Red cannot shoot at all
+  wrong You can catch them from behind
+  wrong Red has to stop and wait
   correct Red has to go around you.
   why Standing in the way buys time. Every second you slow them down, another Blue player gets back to help.

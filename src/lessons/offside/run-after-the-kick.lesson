@@ -12,28 +12,21 @@ setup
   ball with B-CM
 
 step
-  caption Watch where Blue is when the ball is played.
+  caption Watch where Blue is when the ball is played. The yellow line marks the last defender.
   draw line 78, 0 to 78, 68
 
 step
-  caption Blue kicks it into the space. Their striker is still behind the line.
+  caption Blue kicks it into the space behind the defender. Their striker is still behind the line — they can sprint past after the kick.
   ball to 84, 30
   arrow from B-CM to ball
   draw line 78, 0 to 78, 68
   duration 1200
 
-step
-  caption Now the striker sprints past the defender and gets there first.
-  B-LF to 82, 30
-  arrow from B-LF to ball
-  draw line 78, 0 to 78, 68
-  duration 900
-
 question
-  prompt Is Blue offside?
+  prompt Is the Blue striker offside?
   answer No
   wrong Yes
-  wrong Yes, they ran too far
+  wrong Yes, they are past the defender
   wrong Only if they score
   correct Not offside.
   why Blue was behind the defender at the moment of the kick. Running past afterwards is a great move, not a foul.

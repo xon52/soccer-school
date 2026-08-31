@@ -6,11 +6,10 @@ setup
   lineup 7v7
   player R-CM at 45, 30
   player B-CB at 30, 30
-  player B-CM at 38, 44
   ball with R-CM
 
 step
-  caption Red passes the ball across the field.
+  caption Red passes toward your defender.
 
 step
   caption Blue sticks an arm out and stops it.

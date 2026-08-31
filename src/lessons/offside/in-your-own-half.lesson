@@ -16,7 +16,7 @@ setup
   ball with B-CM
 
 step
-  caption Watch where Blue is when the ball is played.
+  caption Watch where Blue is when the ball is played. The yellow line is the halfway line.
   draw halfway-line
 
 step
@@ -27,7 +27,7 @@ step
   duration 1300
 
 question
-  prompt Is Blue offside?
+  prompt Is the Blue striker offside?
   answer No
   wrong Yes
   wrong Yes, they are past everyone

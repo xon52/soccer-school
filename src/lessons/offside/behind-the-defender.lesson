@@ -12,7 +12,7 @@ setup
   ball with B-CM
 
 step
-  caption Watch where Blue is when the ball is played.
+  caption Watch where Blue is when the ball is played. The yellow line marks the last defender.
   draw line 78, 0 to 78, 68
 
 step
@@ -23,13 +23,13 @@ step
   duration 1300
 
 question
-  prompt Is Blue offside?
+  prompt Is the Blue striker offside?
   answer No
   wrong Yes
-  wrong Yes, they are too close to the goal
+  wrong Yes, they are ahead of the defender
   wrong Only if they shoot
   correct Not offside.
-  why Blue is on their own side of the last Red defender when the ball is kicked, so they can take it and keep going.
+  why The Blue striker is behind the last Red defender when the ball is kicked, so they can take it and keep going.
 
 question
   prompt What happens now?

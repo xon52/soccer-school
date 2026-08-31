@@ -5,7 +5,7 @@
  * on top of the play dock. The payload below is the one the embed sends.
  */
 
-export const FEEDBACK_APP = 'soccer'
+export const FEEDBACK_APP = 'soccer-school'
 export const FEEDBACK_ENDPOINT = 'https://admin.xon5.com/api/feedback'
 
 /** Public sitekey, same one the embed ships with. */
